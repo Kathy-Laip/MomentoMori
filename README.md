@@ -12,3 +12,5 @@
 Роли членов команды и их задачи: https://docs.google.com/document/d/1SBncINUofOBhjtgfkjPb2T4a3El3kh3ave2hkeGyW2s/edit?usp=sharing
 
 База знаний: https://docs.google.com/document/d/1CZe3FAhqDayhiz7QhCdCEk6-Bseihh9ceUdvXE7LiKA/edit?usp=sharing
+
+Распределение задач для каждого участника: https://b24-8tcyem.bitrix24.ru/company/personal/user/1/tasks/

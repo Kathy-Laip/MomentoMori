@@ -8,5 +8,7 @@
 Все составляющие заказа, начиная с текстиля, заканчивая материалами для изготовления гробов хранятся на складе. Производится учет всех компонентов.
 
 График встреч: https://docs.google.com/document/d/1N_PdhqPL5je7f5UnLoyna6v0gH8D5SSrp4cSidttWxg/edit?usp=sharing
+
 Роли членов команды и их задачи: https://docs.google.com/document/d/1SBncINUofOBhjtgfkjPb2T4a3El3kh3ave2hkeGyW2s/edit?usp=sharing
+
 База знаний: https://docs.google.com/document/d/1CZe3FAhqDayhiz7QhCdCEk6-Bseihh9ceUdvXE7LiKA/edit?usp=sharing

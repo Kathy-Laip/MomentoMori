@@ -14,3 +14,6 @@
 База знаний: https://docs.google.com/document/d/1CZe3FAhqDayhiz7QhCdCEk6-Bseihh9ceUdvXE7LiKA/edit?usp=sharing
 
 Распределение задач для каждого участника: https://b24-8tcyem.bitrix24.ru/company/personal/user/1/tasks/
+
+
+Макет приложения: https://www.figma.com/file/rZbJB0q7aW43PPPl1Ozroi/Momentoo-Mori?node-id=0%3A1&t=bfRPnHOYq7gWdmGf-1

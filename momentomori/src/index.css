@@ -93,8 +93,116 @@ body{
   position: absolute;
   width: 673px;
   height: 620px;
-  left: -180px;
-  top: -262px;
+  left: -60px;
+  top: -62px;
 
   background: url(images/roseOne.png);
+  background-repeat: no-repeat;
+}
+
+
+.roseTwo{
+  position: absolute;
+  width: 451px;
+  height: 403px;
+  left: 684px;
+  top: -55px;
+  z-index: 1;
+
+  background: url(images/roseTwo.png);
+  background-repeat: no-repeat;
+}
+
+.roseThree{
+  position: absolute;
+  width: 173.35px;
+  height: 153.67px;
+  left: 529px;
+  top: 50.82px;
+  z-index: -1;
+
+  background: url(images/roseThree.png);
+  transform: rotate(-11.92deg);
+}
+
+.roseFour{
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 1200.28px;
+  top: 408px;
+
+  background: url(images/roseThree.png);
+  transform: rotate(65.96deg);
+  background-repeat: no-repeat;
+}
+
+.roseFive{
+  position: absolute;
+  width: 421.94px;
+  height: 451.61px;
+  right: -90px;
+  top: 0px;
+  z-index: -1;
+
+  background: url(images/roseFive.png);
+  background-repeat: no-repeat;
+}
+
+.roseSix{
+  position: absolute;
+  width: 409px;
+  height: 472px;
+  left: 1108px;
+  top: 506px;
+
+  background: url(images/roseSix.png);
+}
+
+.roseSeven{
+  position: absolute;
+  width: 400px;
+  height: 350px;
+  left: 55%;
+  top: 50%;
+  z-index: -1;
+
+  background: url(images/roseSeven.png);
+  background-repeat: no-repeat;
+  transform: rotate(0deg);
+}
+
+.roseEight{
+  position: absolute;
+  width: 200px;
+  height: 180px;
+  left: 30%;
+  bottom: 0%;
+  z-index: 1;
+
+  background: url(images/roseEight.png);
+  transform: rotate(-10.71deg);
+}
+
+.roseNine{
+  position: absolute;
+  width: 409px;
+  height: 472px;
+  left: 0px;
+  top: 378px;
+
+  background: url(images/roseSix.png);
+  transform: rotate(47.02deg);
+}
+
+.roseTen{
+  position: absolute;
+  width: 200px;
+  height: 180px;
+  left: -40px;
+  top: 42%;
+  z-index: -1;
+  
+  background: url(images/roseEight.png);
+  transform: rotate(55.13deg);
 }

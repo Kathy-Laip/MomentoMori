@@ -7,7 +7,7 @@ class Img extends React.Component{
 
     render(){
         return(
-            <div className="{this.props.nameClass}"></div>
+            <div className={`pill ${this.props.nameClass}`}></div>
         )
     }
 }

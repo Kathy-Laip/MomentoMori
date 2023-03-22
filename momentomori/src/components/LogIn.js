@@ -12,6 +12,15 @@ class LogIn extends React.Component{
             <div>
                 <Img nameClass="roseOne"/>
                 <EntranceBox/>
+                <Img nameClass="roseTwo"/>
+                <Img nameClass="roseThree"/>
+                <Img nameClass="roseFour"/>
+                <Img nameClass="roseFive"/>
+                <Img nameClass="roseSix"/>
+                <Img nameClass="roseSeven"/>
+                <Img nameClass="roseEight"/>
+                <Img nameClass="roseNine"/>
+                <Img nameClass="roseTen"/>
             </div>
         )
     }

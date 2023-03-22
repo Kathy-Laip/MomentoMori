@@ -1,10 +1,12 @@
 :root{
   --black: #000;
   --brown: #C5A173;
+  --chocolate: #6D4622;
 }
 
 body{
   background-color: var(--black);
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .entranceBox{
@@ -16,4 +18,83 @@ body{
   
   background: var(--black);
   box-shadow: 0px 2px 39px 1px var(--black), 0px 4px 27px 30px var(--brown);
+}
+
+.entranceBoxName{
+  position: absolute;
+  width: 498px;
+  height: 73px;
+  left: calc(50% - 498px/2 - 12px);
+  top: calc(50% - 73px/2 - 150.5px);
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 77px;
+  text-align: center;
+
+  color: var(--brown);
+}
+
+#email{
+  position: absolute;
+  width: 695px;
+  height: 60px;
+  left: calc(50% - 695px/2 + 10.5px);
+  top: calc(50% - 60px/2 - 24px);
+
+  background: var(--brown);
+  border: none;
+}
+
+#email::placeholder{
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  font-size: 32px;
+  color: var(--black);
+}
+
+#password{
+  position: absolute;
+  width: 695px;
+  height: 60px;
+  left: calc(50% - 695px/2 + 10.5px);
+  top: calc(50% - 60px/2 + 74px);
+  
+  background: var(--brown);
+  border: none;
+}
+
+#password::placeholder{
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  font-size: 32px;
+  color: var(--black);
+}
+
+.buttonLogIn{
+  text-align: center;
+  font-size: 32px;
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 300px;
+  height: 59px;
+  left: calc(50% - 300px/2 - 2px);
+  top: calc(50% - 59px/2 + 173.5px);
+
+  background: var(--brown);
+  border: 3px solid var(--chocolate);
+}
+
+.roseOne{
+  position: absolute;
+  width: 673px;
+  height: 620px;
+  left: -180px;
+  top: -262px;
+
+  background: url(images/roseOne.png);
 }

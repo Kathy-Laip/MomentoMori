@@ -2,11 +2,15 @@
   --black: #000;
   --brown: #C5A173;
   --chocolate: #6D4622;
+  --white: #fff;
 }
 
 body{
-  background-color: var(--black);
   font-family: 'Times New Roman', Times, serif;
+}
+
+a{
+  text-decoration: none;
 }
 
 .entranceBox{
@@ -89,6 +93,10 @@ body{
   border: 3px solid var(--chocolate);
 }
 
+.buttonLogIn:hover{
+  background-color: var(--chocolate);
+}
+
 .roseOne{
   position: absolute;
   width: 673px;
@@ -96,7 +104,7 @@ body{
   left: -60px;
   top: -62px;
 
-  background: url(images/roseOne.png);
+  background: url(../images/roseOne.png);
   background-repeat: no-repeat;
 }
 
@@ -109,7 +117,7 @@ body{
   top: -55px;
   z-index: 1;
 
-  background: url(images/roseTwo.png);
+  background: url(../images/roseTwo.png);
   background-repeat: no-repeat;
 }
 
@@ -121,7 +129,7 @@ body{
   top: 50.82px;
   z-index: -1;
 
-  background: url(images/roseThree.png);
+  background: url(../images/roseThree.png);
   transform: rotate(-11.92deg);
 }
 
@@ -132,7 +140,7 @@ body{
   left: 1200.28px;
   top: 408px;
 
-  background: url(images/roseThree.png);
+  background: url(../images/roseThree.png);
   transform: rotate(65.96deg);
   background-repeat: no-repeat;
 }
@@ -141,22 +149,25 @@ body{
   position: absolute;
   width: 421.94px;
   height: 451.61px;
-  right: -90px;
+  right: 0px;
   top: 0px;
   z-index: -1;
 
-  background: url(images/roseFive.png);
-  background-repeat: no-repeat;
+  background: url(../images/roseFive.png);
+  background-position:center center;
+  background-size:cover;
+  background-repeat: no-repeat ;
 }
 
 .roseSix{
   position: absolute;
   width: 409px;
   height: 472px;
-  left: 1108px;
-  top: 506px;
+  right: 0px;
+  bottom: 0px;
 
-  background: url(images/roseSix.png);
+  background: url(../images/roseSix.png);
+  background-repeat: no-repeat;
 }
 
 .roseSeven{
@@ -167,7 +178,7 @@ body{
   top: 50%;
   z-index: -1;
 
-  background: url(images/roseSeven.png);
+  background: url(../images/roseSeven.png);
   background-repeat: no-repeat;
   transform: rotate(0deg);
 }
@@ -180,8 +191,8 @@ body{
   bottom: 0%;
   z-index: 1;
 
-  background: url(images/roseEight.png);
-  transform: rotate(-10.71deg);
+  background: url(../images/roseEight.png);
+  transform: rotate(0.71deg);
 }
 
 .roseNine{
@@ -189,9 +200,10 @@ body{
   width: 409px;
   height: 472px;
   left: 0px;
-  top: 378px;
+  bottom: 0px;
 
-  background: url(images/roseSix.png);
+  background: url(../images/roseSix.png);
+  background-repeat: no-repeat;
   transform: rotate(47.02deg);
 }
 
@@ -203,6 +215,6 @@ body{
   top: 42%;
   z-index: -1;
   
-  background: url(images/roseEight.png);
+  background: url(../images/roseEight.png);
   transform: rotate(55.13deg);
 }

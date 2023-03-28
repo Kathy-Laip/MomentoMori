@@ -43,16 +43,16 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: categories; Type: TABLE; Schema: public; Owner: postgres
+-- Name: products_categories; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.categories (
+CREATE TABLE public.products_categories (
     id integer NOT NULL,
     name character varying
 );
 
 
-ALTER TABLE public.categories OWNER TO postgres;
+ALTER TABLE public.products_categories OWNER TO postgres;
 
 --
 -- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -73,7 +73,7 @@ ALTER TABLE public.categories_id_seq OWNER TO postgres;
 -- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.products_categories.id;
 
 
 --
@@ -238,10 +238,73 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
--- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: services_categories; Type: TABLE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+CREATE TABLE public.services_categories (
+    id integer NOT NULL,
+    name character varying
+);
+
+
+ALTER TABLE public.services_categories OWNER TO postgres;
+
+--
+-- Name: services_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.services_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.services_categories_id_seq OWNER TO postgres;
+
+--
+-- Name: services_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.services_categories_id_seq OWNED BY public.services_categories.id;
+
+
+--
+-- Name: services_people; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.services_people (
+    id integer NOT NULL,
+    type integer,
+    name character varying,
+    phone character varying
+);
+
+
+ALTER TABLE public.services_people OWNER TO postgres;
+
+--
+-- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.services_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.services_id_seq OWNER TO postgres;
+
+--
+-- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.services_id_seq OWNED BY public.services_people.id;
 
 
 --
@@ -273,15 +336,24 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
--- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: products_categories id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-COPY public.categories (id, name) FROM stdin;
-1	Гроб
-2	Венок
-3	Табличка
-4	Крест
-\.
+ALTER TABLE ONLY public.products_categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- Name: services_categories id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.services_categories ALTER COLUMN id SET DEFAULT nextval('public.services_categories_id_seq'::regclass);
+
+
+--
+-- Name: services_people id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.services_people ALTER COLUMN id SET DEFAULT nextval('public.services_id_seq'::regclass);
 
 
 --
@@ -345,6 +417,44 @@ COPY public.products (id, category, type, cost) FROM stdin;
 
 
 --
+-- Data for Name: products_categories; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products_categories (id, name) FROM stdin;
+1	Гроб
+2	Венок
+3	Табличка
+4	Крест
+\.
+
+
+--
+-- Data for Name: services_categories; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.services_categories (id, name) FROM stdin;
+1	Гробовщик
+2	Бальзамировщик
+3	Священник
+4	Водитель
+5	Психолог
+\.
+
+
+--
+-- Data for Name: services_people; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.services_people (id, type, name, phone) FROM stdin;
+1	1	sdklsdl;fd	89370103238
+2	2	sdfghjtyrt	89622483742
+3	3	gdhdrse	89462848754
+4	4	sgawretyrt	89756262100
+5	5	sghytyres	89451637113
+\.
+
+
+--
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -380,10 +490,24 @@ SELECT pg_catalog.setval('public.products_id_seq', 6, true);
 
 
 --
--- Name: categories categories_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: services_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.categories
+SELECT pg_catalog.setval('public.services_categories_id_seq', 5, true);
+
+
+--
+-- Name: services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.services_id_seq', 5, true);
+
+
+--
+-- Name: products_categories categories_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products_categories
     ADD CONSTRAINT categories_pk PRIMARY KEY (id);
 
 
@@ -428,6 +552,22 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: services_categories services_categories_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.services_categories
+    ADD CONSTRAINT services_categories_pk PRIMARY KEY (id);
+
+
+--
+-- Name: services_people services_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.services_people
+    ADD CONSTRAINT services_pk PRIMARY KEY (id);
+
+
+--
 -- Name: orders orders_clients_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -464,7 +604,7 @@ ALTER TABLE ONLY public.orders_to_products
 --
 
 ALTER TABLE ONLY public.products
-    ADD CONSTRAINT products_categories_id_fk FOREIGN KEY (category) REFERENCES public.categories(id);
+    ADD CONSTRAINT products_categories_id_fk FOREIGN KEY (category) REFERENCES public.products_categories(id);
 
 
 --

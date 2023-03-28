@@ -209,7 +209,8 @@ CREATE TABLE public.products (
     id integer NOT NULL,
     category integer,
     type character varying,
-    cost integer
+    cost integer,
+    num integer
 );
 
 
@@ -406,13 +407,13 @@ COPY public.orders_to_products ("order_ID", "product_ID", amount) FROM stdin;
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, category, type, cost) FROM stdin;
-1	1	black	10000
-5	3	wooden	500
-2	1	with velvet	15000
-6	4	stone	5000
-3	2	simple	100
-4	2	rich bitch	10000
+COPY public.products (id, category, type, cost, num) FROM stdin;
+6	4	stone	5000	300
+3	2	simple	100	300
+2	1	with velvet	15000	5
+1	1	black	10000	30
+5	3	wooden	500	10
+4	2	rich bitch	10000	10
 \.
 
 
@@ -486,7 +487,7 @@ SELECT pg_catalog.setval('public.orders_id_seq', 3, true);
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 6, true);
+SELECT pg_catalog.setval('public.products_id_seq', 7, true);
 
 
 --

@@ -77,77 +77,6 @@ ALTER SEQUENCE public.categories_id_seq OWNED BY public.products_categories.id;
 
 
 --
--- Name: clients; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.clients (
-    id integer NOT NULL,
-    name character varying,
-    phone character varying,
-    email character varying
-);
-
-
-ALTER TABLE public.clients OWNER TO postgres;
-
---
--- Name: clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.clients_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.clients_id_seq OWNER TO postgres;
-
---
--- Name: clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.clients_id_seq OWNED BY public.clients.id;
-
-
---
--- Name: managers; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.managers (
-    id integer NOT NULL,
-    name character varying,
-    phone character varying
-);
-
-
-ALTER TABLE public.managers OWNER TO postgres;
-
---
--- Name: managers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.managers_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.managers_id_seq OWNER TO postgres;
-
---
--- Name: managers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.managers_id_seq OWNED BY public.managers.id;
-
-
---
 -- Name: orders; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -203,10 +132,11 @@ ALTER TABLE public.orders_to_products OWNER TO postgres;
 
 CREATE TABLE public.products (
     id integer NOT NULL,
-    category integer,
-    type character varying,
-    cost integer,
-    num integer
+    type character varying NOT NULL,
+    category integer NOT NULL,
+    amount integer,
+    cost_for_one integer,
+    details character varying
 );
 
 
@@ -235,85 +165,17 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
--- Name: services_categories; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.services_categories (
-    id integer NOT NULL,
-    name character varying
-);
-
-
-ALTER TABLE public.services_categories OWNER TO postgres;
-
---
--- Name: services_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.services_categories_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.services_categories_id_seq OWNER TO postgres;
-
---
--- Name: services_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.services_categories_id_seq OWNED BY public.services_categories.id;
-
-
---
--- Name: services_people; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.services_people (
-    id integer NOT NULL,
-    type integer,
-    name character varying,
-    phone character varying
-);
-
-
-ALTER TABLE public.services_people OWNER TO postgres;
-
---
--- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.services_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.services_id_seq OWNER TO postgres;
-
---
--- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.services_id_seq OWNED BY public.services_people.id;
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.users (
     id integer NOT NULL,
-    status integer,
+    status character varying,
     login character varying,
     password character varying,
-    id_foreign integer
+    name character varying,
+    email character varying,
+    phone character varying
 );
 
 
@@ -355,20 +217,6 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: clients id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.clients ALTER COLUMN id SET DEFAULT nextval('public.clients_id_seq'::regclass);
-
-
---
--- Name: managers id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.managers ALTER COLUMN id SET DEFAULT nextval('public.managers_id_seq'::regclass);
-
-
---
 -- Name: orders id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -390,46 +238,10 @@ ALTER TABLE ONLY public.products_categories ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- Name: services_categories id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.services_categories ALTER COLUMN id SET DEFAULT nextval('public.services_categories_id_seq'::regclass);
-
-
---
--- Name: services_people id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.services_people ALTER COLUMN id SET DEFAULT nextval('public.services_id_seq'::regclass);
-
-
---
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
-
-
---
--- Data for Name: clients; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.clients (id, name, phone, email) FROM stdin;
-1	Латыпов Рустам Хафизович	89242939302	roustam.latypov@kpfu.ru
-2	Еникеев Разиль Радикович	89462718496	renikeev@kpfu.ru
-3	Андрианова Анастасия Александровна	89364281042	Anastasiya.Andrianova@kpfu.ru
-\.
-
-
---
--- Data for Name: managers; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.managers (id, name, phone) FROM stdin;
-1	Носова Ксения Евгеньевна	89204287314
-2	Шляпникова Екатерина Сергеевна	89602356188
-3	Хамитова Айша Рашидовна	89172047282
-\.
 
 
 --
@@ -460,13 +272,17 @@ COPY public.orders_to_products ("order_ID", "product_ID", amount) FROM stdin;
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, category, type, cost, num) FROM stdin;
-4	2	rich bitch	10000	10
-6	4	каменная	5000	300
-2	1	с бархатом	15000	5
-3	2	простой	100	300
-5	3	деревянная	500	10
-1	1	черный	10000	30
+COPY public.products (id, type, category, amount, cost_for_one, details) FROM stdin;
+1	товар	1	10	2000	черный
+2	товар	1	1	20000	с бархатом
+3	товар	2	50	300	розы
+6	услуга	5	1	1000	\N
+7	услуга	6	1	1500	\N
+8	услуга	7	1	1000	\N
+9	услуга	8	1	100	\N
+10	услуга	9	1	2500	\N
+5	товар	4	1	100000	золотой
+4	товар	3	10	500	деревянная
 \.
 
 
@@ -479,32 +295,11 @@ COPY public.products_categories (id, name) FROM stdin;
 2	Венок
 3	Табличка
 4	Крест
-\.
-
-
---
--- Data for Name: services_categories; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.services_categories (id, name) FROM stdin;
-1	Гробовщик
-2	Бальзамировщик
-3	Священник
-4	Водитель
-5	Психолог
-\.
-
-
---
--- Data for Name: services_people; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.services_people (id, type, name, phone) FROM stdin;
-1	1	sdklsdl;fd	89370103238
-2	2	sdfghjtyrt	89622483742
-3	3	gdhdrse	89462848754
-4	4	sgawretyrt	89756262100
-5	5	sghytyres	89451637113
+5	Гробовщик
+6	Бальзамировщик
+7	Водитель
+8	Священник
+9	Психолог
 \.
 
 
@@ -512,13 +307,13 @@ COPY public.services_people (id, type, name, phone) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id, status, login, password, id_foreign) FROM stdin;
-1	1	deathisanillusion	hearthstone	1
-2	1	thyheart	YANABUDGETE	2
-3	1	weredoomed	smertdolgovu	3
-4	2	latypov	lapochka	1
-5	2	34turhiolgw;u4895tlo	wk3rgiy9;pok4ljkn	2
-6	2	AAA	dekanatlohi	3
+COPY public.users (id, status, login, password, name, email, phone) FROM stdin;
+6	клиент	AAA	dekanatlohi	Андрианова Анастасия Александровна	Anastasiya.Andrianova@kpfu.ru	89364281042
+2	менеджер	thyheart	YANABUDGETE	Шляпникова Екатерина Сергеевна	ESShlyapnikova@kpfu.ru	89602356188
+5	клиент	34turhiolgw;u4895tlo	wk3rgiy9;pok4ljkn	Еникеев Разиль Радикович	renikeev@kpfu.ru	89462718496
+3	менеджер	weredoomed	smertdolgovu	Хамитова Айша Рашидовна	ARKhamitova@kpfu.ru	89172047282
+1	менеджер	deathisanillusion	hearthstone	Носова Ксения Евгеньевна	KENosova@kpfu.ru	89204287314
+4	клиент	latypov	lapochka	Латыпов Рустам Хафизович	roustam.latypov@kpfu.ru	89242939302
 \.
 
 
@@ -526,21 +321,7 @@ COPY public.users (id, status, login, password, id_foreign) FROM stdin;
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 4, true);
-
-
---
--- Name: clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.clients_id_seq', 3, true);
-
-
---
--- Name: managers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.managers_id_seq', 3, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 9, true);
 
 
 --
@@ -554,21 +335,7 @@ SELECT pg_catalog.setval('public.orders_id_seq', 3, true);
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 7, true);
-
-
---
--- Name: services_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.services_categories_id_seq', 5, true);
-
-
---
--- Name: services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.services_id_seq', 5, true);
+SELECT pg_catalog.setval('public.products_id_seq', 10, true);
 
 
 --
@@ -591,22 +358,6 @@ SELECT pg_catalog.setval('public.users_id_seq', 6, true);
 
 ALTER TABLE ONLY public.products_categories
     ADD CONSTRAINT categories_pk PRIMARY KEY (id);
-
-
---
--- Name: clients clients_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.clients
-    ADD CONSTRAINT clients_pk PRIMARY KEY (id);
-
-
---
--- Name: managers managers_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.managers
-    ADD CONSTRAINT managers_pk PRIMARY KEY (id);
 
 
 --
@@ -634,43 +385,11 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: services_categories services_categories_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.services_categories
-    ADD CONSTRAINT services_categories_pk PRIMARY KEY (id);
-
-
---
--- Name: services_people services_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.services_people
-    ADD CONSTRAINT services_pk PRIMARY KEY (id);
-
-
---
 -- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (id);
-
-
---
--- Name: orders orders_clients_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT orders_clients_id_fk FOREIGN KEY ("client_ID") REFERENCES public.clients(id);
-
-
---
--- Name: orders orders_managers_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT orders_managers_id_fk FOREIGN KEY ("manager_ID") REFERENCES public.managers(id);
 
 
 --
@@ -690,27 +409,27 @@ ALTER TABLE ONLY public.orders_to_products
 
 
 --
--- Name: products products_categories_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: orders orders_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_users_id_fk FOREIGN KEY ("client_ID") REFERENCES public.users(id);
+
+
+--
+-- Name: orders orders_users_id_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_users_id_fk_2 FOREIGN KEY ("manager_ID") REFERENCES public.users(id);
+
+
+--
+-- Name: products products_products_categories_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.products
-    ADD CONSTRAINT products_categories_id_fk FOREIGN KEY (category) REFERENCES public.products_categories(id);
-
-
---
--- Name: users users_clients_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_clients_id_fk FOREIGN KEY (id_foreign) REFERENCES public.clients(id);
-
-
---
--- Name: users users_managers_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_managers_id_fk FOREIGN KEY (id_foreign) REFERENCES public.managers(id);
+    ADD CONSTRAINT products_products_categories_id_fk FOREIGN KEY (category) REFERENCES public.products_categories(id);
 
 
 --

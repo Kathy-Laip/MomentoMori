@@ -1,0 +1,19 @@
+@startuml
+[*] --> Access
+Access: доступ к выбору товаров и услуг на сайте 
+Access --> AssembleOrder: переход к составлению заказа
+AssembleOrder: составление заказа
+AssembleOrder --> CreateEstimate: заказ сформирован, составляем смену
+CreateEstimate: составление сметы заказа
+CreateEstimate --> AssembleOrder: редактируем заказ
+CreateEstimate --> Access: клиент передумал
+AssembleOrder --> Access: клиент передумал
+AddToDatabase: добавление полностью оформленного заказа в базу данных
+CreateEstimate --> AddToDatabase
+AddToDatabase --> [*]: заказ оформлен и добавлен в базу
+AddToDatabase --> DeleteOrder: заказ отменён
+DeleteOrder: удаляем всю информацию о заказе
+DeleteOrder --> [*]
+Access --> [*]: клиент передумал
+DeleteOrder --> Access: переходим снова к очередному заказу
+@enduml

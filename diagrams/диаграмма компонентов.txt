@@ -1,0 +1,19 @@
+@startuml
+component Клиент as Client
+component Менеджер as Manager
+component Склад as Storage
+component [База данных] as Database
+component Товар as Product
+component Заказ as Order
+component Сервер as Server
+component [Веб-приложение] as Website
+Storage .. Product
+Client --> Order
+Client -- Manager
+Manager --> Order
+Order -- Product
+Order --> Website
+Database <--> Server
+Server <--> Website
+Product --> Database
+@enduml

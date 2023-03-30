@@ -1,0 +1,16 @@
+@startuml
+database Database as "PostgreSQL" {
+  artifact users
+  artifact products
+  artifact orders
+  artifact products_to_orders
+  artifact products_categories
+}
+rectangle Program {
+  component Server
+  component Website
+}
+
+Server -- Website
+Server <-- Database
+@enduml

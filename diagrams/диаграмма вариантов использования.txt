@@ -1,0 +1,33 @@
+@startuml
+actor :Клиент: as Client
+usecase (Выбрать товары) as ChooseProducts
+usecase (Добавить товары в корзину) as AddProducts
+usecase (Удалить товары из корзины) as RemoveProducts
+usecase (Оформить заказ) as PlaceOrder
+usecase (Посмотреть статус заказа) as CheckOrderStatus
+usecase (Отменить заказ) as CancelOrder
+actor :Менеджер: as Manager
+usecase (Подтвердить заказ) as ConfirmOrder
+usecase (Посмотреть детали заказа) as CheckOrderDetails
+usecase (Редактировать детали заказа) as EditOrderDetails
+usecase (Составить смету) as CreateEstimate
+usecase (Редактировать смету) as EditEstimate
+usecase (Проверить товары на складе) as CheckProducts
+
+Client -- ChooseProducts
+Client -- AddProducts
+Client -- RemoveProducts
+Client -- PlaceOrder
+Client -- CheckOrderStatus
+
+Manager -- ConfirmOrder
+Manager -- EditOrderDetails
+Manager -- CreateEstimate
+Manager -- EditEstimate
+Manager -- CheckProducts
+
+Manager -- CancelOrder
+Client -- CancelOrder
+Manager -- CheckOrderDetails
+Client -- CheckOrderDetails
+@enduml

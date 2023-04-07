@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="./css/managerApplication.css">
     <link rel="icon" href="./images/roseSix.png">
     <title>Оставить заявку</title>
+    <style>
+        #x{
+            position: fixed;
+            left: 0;
+            right:0;
+            bottom:0;
+            margin: 200px;
+    }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -91,14 +100,24 @@
     </div>
 
     <div class="listOfProducts">
+        <!-- <div class="containerForProduct"></div>
         <div class="containerForProduct"></div>
         <div class="containerForProduct"></div>
         <div class="containerForProduct"></div>
-        <div class="containerForProduct"></div>
-        <div class="containerForProduct"></div>
-        <button class="arrange">Оформить!</button>
+        <div class="containerForProduct"></div> -->
+        <div class="containerForProduct">
+            <div class="textForProduct">
+                Категория <br> Название продукта <br> Цена: ... рублей <br> Количество: ..
+            </div>
+        </div>
+        <div class="containerForProduct">
+            <div class="textForProduct">
+                Категория <br> Название продукта <br> Цена: ... рублей <br> Количество: ..
+            </div>
+        </div>
     </div>
+    <button class="arrange">Оформить!</button>
 
-    
+    <div id="x"></div>
 </body>
 </html>

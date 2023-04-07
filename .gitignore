@@ -1,2 +1,4 @@
 requirements.txt
 env
+main.py
+config.py

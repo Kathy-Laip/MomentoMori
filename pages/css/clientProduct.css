@@ -1,0 +1,9 @@
+.titleForClient{
+    font-size: 48px;
+    font-weight: 700;
+
+    position: absolute;
+    top: 20%;
+    left: 7.5%;
+    color: var(--chocolate);
+}

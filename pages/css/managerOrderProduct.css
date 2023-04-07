@@ -1,0 +1,127 @@
+.infoAboutOrderProduct{
+    font-size: 48px;
+    font-weight: 400;
+
+    position: absolute;
+    top: 35%;
+    left: 7.5%;
+    color: var(--chocolate);
+}
+
+.infoAboutOrderProduct ul{
+    list-style-type: none;
+}
+
+.infoAboutOrderProduct ul li{
+    display: inline-block;
+    margin-right: 120px;
+}
+
+.addLineForProduct{
+    width: 80px;
+    height: 60px;
+
+    position: absolute;
+    top: 32%;
+    left: 35%;
+
+    background-color: var(--gray);
+    color: var(--chocolate);
+
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+
+    border: none;
+    border-radius: 10%;
+}
+
+.addLineForProduct:hover{
+    background-color: var(--space-gray);
+}
+
+.addLineForProduct:active{
+    background-color: var(--space-gray);
+}
+
+.btnOrder{
+    width: 400px;
+    height: 60px;
+
+    position: absolute;
+    top: 32%;
+    right: 10%;
+
+    background-color: var(--gray);
+    color: var(--chocolate);
+
+    font-size: 32px;
+    font-weight: 400;
+    text-align: center;
+
+    border: none;
+}
+
+.btnOrder:hover{
+    background-color: var(--space-gray);
+}
+
+.btnOrder:active{
+    background-color: var(--space-gray);
+}
+
+#listOrderProduct{
+    width: 90%;
+    height: 50px;
+
+    position: absolute;
+    top: 50%;
+    left: 5%;
+}
+
+.containerForProductInList{
+    position: relative;
+    width: 100%;
+    float: left;
+
+    margin-bottom: 100px;
+}
+
+.categoryInput{
+    position: absolute;
+    left: 0%;
+
+    width: 28%;
+    height: 70px;
+
+    background-color: var(--gray);
+    color: var(--black);
+
+    border: none;
+}
+
+.nameProduct{
+    position: absolute;
+    left: 29%;
+
+    width: 42%;
+    height: 70px;
+
+    background-color: var(--gray);
+    color: var(--black);
+
+    border: none;
+}
+
+.countProduct{
+    position: absolute;
+    left: 73%;
+
+    width: 20%;
+    height: 70px;
+
+    background-color: var(--gray);
+    color: var(--black);
+
+    border: none;
+}

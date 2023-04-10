@@ -1,15 +1,80 @@
 import psycopg2
 from flask import Flask, redirect, url_for, render_template, request
 import json
+from config import Config
+import numpy as np
+from configparser import ConfigParser
 
 
-app = Flask(__name__)
+def config(filename='database.ini', section='postgresql'):
+    # create a parser
+    parser = ConfigParser()
+    # read config file
+    parser.read(filename)
+
+    # get section, default to postgresql
+    db = {}
+    if parser.has_section(section):
+        params = parser.items(section)
+        for param in params:
+            db[param[0]] = param[1]
+    else:
+        raise Exception('Section {0} not found in the {1} file'.format(section, filename))
+    return db
+
+def connect():
+    """ Connect to the PostgreSQL database server """
+    conn = None
+    #try:
+    # read connection parameters
+    params = config()
+
+    # connect to the PostgreSQL server
+    print('Connecting to the PostgreSQL database...')
+    print(params)
+    conn = psycopg2.connect(**params)
+    
+    print("abcde")
+    # create a cursor
+    cur = conn.cursor()
+    
+    # execute a statement
+    print('PostgreSQL database version:')
+    cur.execute('SELECT version()')
+
+    # display the PostgreSQL database server version
+    db_version = cur.fetchone()
+    print(db_version)
+    
+    # close the communication with the PostgreSQL
+    cur.close()
+    '''
+    except (Exception, psycopg2.DatabaseError, psycopg2.OperationalError) as error:
+        print("error")
+    finally:
+        if conn is not None:
+            conn.close()
+            print('Database connection closed.')
+        else:
+            print('Database connection failed for some reason')
+    '''
+
+
+if __name__ == '__main__':
+    connection = connect()
+
+    
+'''
+app = Flask(__name__, template_folder='./pages', static_folder='./pages')
 connection = psycopg2.connect(
-    database="memento_mori", user="postgres", password="password", host="127.0.0.1", port="5433"
+    database="memento_mori", user="postgres", password="xxxxxxx", host="localhost", port="5433"
 )
 cursor = connection.cursor()
+'''
 
 
+
+'''
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -102,4 +167,4 @@ def get_products():
 connection.close()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)'''

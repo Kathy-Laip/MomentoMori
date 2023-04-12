@@ -1,2 +1,4 @@
 requirements.txt
 env
+server/database.ini
+server/try.py

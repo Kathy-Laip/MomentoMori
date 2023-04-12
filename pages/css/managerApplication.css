@@ -378,6 +378,11 @@
     /* margin-bottom: 5%; */
 }
 
+.arrange:hover{
+    background-color: var(--black);
+    color: var(--white);
+}
+
 .listOfProducts{
     position: absolute;
     top: 142%;

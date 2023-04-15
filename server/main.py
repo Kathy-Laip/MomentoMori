@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import psycopg2
-import flask_login
+# import flask_login
 import json
 # from config import Config
 import numpy as np
 from configparser import ConfigParser
 
-app = Flask(__name__, template_folder='./pages', static_folder='./pages')
-app.secret_key = 'your_secret_key'
+app = Flask(__name__, template_folder='../pages', static_folder='../pages')
+# app.secret_key = 'your_secret_key'
 
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
@@ -23,26 +23,29 @@ def config(filename='database.ini', section='postgresql'):
 
 params = config()
 conn = psycopg2.connect(**params)
-cursor = conn.cursor()
 
 @app.route("/signin", methods=["POST"])
 def sign_in():
+    cursor = conn.cursor()
     json_in_data = json.loads(request.get_data())
     login = json_in_data["login"]
     password = json_in_data["password"]
     out_data = {}
 
-    data_from_db = cursor.execute("select * from users where login = login")
+    data_from_db = cursor.execute("select * from users where login = '{0}' and password = '{1}'".format(login, password))
+    data_from_db = cursor.fetchone()
+    # print(data_from_db)
 
-    if len(data_from_db) == 0:
+    if data_from_db is None:
         out_data["user_found"] = False
     else:
         out_data["user_found"] = True
         out_data["status"] = data_from_db[1]
 
-    return json.dump(out_data)
+    return json.dumps(out_data)
 
 
 #conn.close()
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app = Flask(__name__, template_folder='../pages', static_folder='../pages')
+    app.run(debug=True, host="127.0.0.1")

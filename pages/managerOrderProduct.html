@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/managerStorage.css">
+    <link rel="stylesheet" href="./css/managerOrderProduct.css">
     <link rel="icon" href="./images/roseSix.png">
     <title>Склад</title>
     <style>
@@ -32,38 +33,34 @@
         <ul>
             <li><a href="/pages/managerStorage.html">Товары</a></li>
             <li><a href="/pages/managerServices.html">Услуги</a></li>
-            <li><a href="/pages/managerOrderProduct.html">Заказать товары</a></li>
+            <li><a href="/pages//managerOrderProduct.html">Заказать товары</a></li>
         </ul>
     </div>
 
     <!-- заголовок раздела -->
     <div class="title">
-        Товары
+        Заказать товары
     </div>
 
+    <button class="addLineForProduct" onclick="addLineForProduct()">+</button>
 
-    <div id="products">
-        <div class="containerProduct">
-            <div class="textProduct">
-                Гроб <br> цена такая такая ajsdaskdak;l dslkfsd;kf;sd f'sdf;s fs'dlf';snalskdadasdlmasl;dkals;dlas;kdlaskd;asknlas
-            </div>
-        </div>
-        <div class="containerProduct">
-            <div class="textProduct">
-                Гроб <br> цена такая такая ajsdaskdak;l dslkfsd;kf;sd f'sdf;s fs'dlf';snalskdadasdlmasl;dkals;dlas;kdlaskd;asknlas
-            </div>
-        </div>
-        <div class="containerProduct">
-            <div class="textProduct">
-                Гроб <br> цена такая такая ajsdaskdak;l dslkfsd;kf;sd f'sdf;s fs'dlf';snalskdadasdlmasl;dkals;dlas;kdlaskd;asknlas
-            </div>
-        </div>
-        <div class="containerProduct">
-            <div class="textProduct">
-                Гроб <br> цена такая такая ajsdaskdak;l dslkfsd;kf;sd f'sdf;s fs'dlf';snalskdadasdlmasl;dkals;dlas;kdlaskd;asknlas
-            </div>
-        </div>
+    <div class="infoAboutOrderProduct">
+        <ul>
+            <li>Категория</li>
+            <li>Наименование товара</li>
+            <li>Кол-во:</li>
+        </ul>
+    </div>
+
+    <button class="btnOrder">Заказать!</button>
+    <div id="listOrderProduct">
+       <div class="containerForProductInList">
+            <input type="text" class="categoryInput">
+            <input type="text" class="nameProduct">
+            <input type="text" class="countProduct">
+       </div>
     </div>
     
+    <script src="./js/managerOrderProduct.js"></script>
 </body>
 </html>

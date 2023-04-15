@@ -3,6 +3,9 @@
   --brown: #C5A173;
   --chocolate: #6D4622;
   --white: #fff;
+  --light-brown: rgba(197, 161, 115, 0.58);
+  --gray: #D9D9D9;
+  --space-gray: #999999;
 }
 
 body{

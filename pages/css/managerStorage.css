@@ -92,15 +92,27 @@
 }
 
 .containerProduct{
+    position: relative;
     float: left;
     width: 32%;
     height: 420px;
 
-    background-color: var(--brown);
+    background-color: var(--light-brown);
     border: 1px solid var(--black);
     box-sizing: border-box;
-    opacity: 60%;
 
     margin-right: 1%;
     margin-bottom: 60px;
+}
+
+.textProduct{
+    position: absolute;
+    width: 90%;
+    left: 2%;
+    bottom: 5%;
+
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--black);
+    word-wrap: break-word;
 }

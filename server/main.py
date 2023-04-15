@@ -1,7 +1,7 @@
 import psycopg2
 from flask import Flask, redirect, url_for, render_template, request
 import json
-from config import Config
+# from config import Config
 import numpy as np
 from configparser import ConfigParser
 
@@ -19,19 +19,20 @@ def config(filename='database.ini', section='postgresql'):
         raise Exception('Section {0} not found in the {1} file'.format(section, filename))
     return db
 
-def connect():
+def connect(statement):
     conn = None
     try:
         params = config()
         print('Connecting to the PostgreSQL database...')
-        print(params)
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         
-        print('PostgreSQL database version:')
-        cur.execute('SELECT version()')
+        # print('PostgreSQL database version:')
+        # cur.execute('SELECT version()')
 
-        db_version = cur.fetchone()
+        cur.execute(statement)
+
+        db_version = cur.fetchall()
         print(db_version)
         
         cur.close()
@@ -47,9 +48,10 @@ def connect():
 
 if __name__ == '__main__':
     app = Flask(__name__, template_folder='./pages', static_folder='./pages')
-    connection = connect()
-    cursor = connection.cursor()
-
+    # cursor = connection.cursor()
+    statement = "SELECT * from users where status = 'менеджер'"
+    connection = connect(statement)
+    app.run(debug=True, host="127.0.0.1")
 
 
 '''

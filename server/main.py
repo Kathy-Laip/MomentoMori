@@ -51,15 +51,13 @@ def get_products():
     data_from_db = cursor.execute("select * from products where type = 'товар'")
     data_from_db = cursor.fetchall()
 
-    '''
-    category = cursor.execute("select * from products_categories where type = 'товар'")
+    category = cursor.execute("select * from products_categories")
     category = cursor.fetchall()
     categories = {}
     for i in range(len(category)):
         categories[category[i][0]] = category[i][1]
-    '''
-
-    categories = {1: "Гроб", 2: "Венок", 3: "Табличка", 4: "Крест"}
+    
+    print(categories)
 
     if data_from_db is None:
         out_data.append({})
@@ -68,14 +66,15 @@ def get_products():
         out_data.append({})
         out_data[0]["products_found"] = True
         for i in range(1, len(data_from_db) + 1):
-            out_data.append({})
-            out_data[i]["id"] = data_from_db[i - 1][0]
-            out_data[i]["category"] = categories[data_from_db[i - 1][2]]
-            out_data[i]["amount"] = data_from_db[i - 1][3]
-            out_data[i]["cost_for_one"] = data_from_db[i - 1][4]
-            out_data[i]["details"] = data_from_db[i - 1][5]
+            if data_from_db[i - 1][3] > 0:
+                out_data.append({})
+                out_data[i]["id"] = data_from_db[i - 1][0]
+                out_data[i]["category"] = categories[data_from_db[i - 1][2]]
+                out_data[i]["amount"] = data_from_db[i - 1][3]
+                out_data[i]["cost_for_one"] = data_from_db[i - 1][4]
+                out_data[i]["details"] = data_from_db[i - 1][5]
 
-    return json.data(out_data)
+    return json.dumps(out_data)
 
 @app.route("/services", methods=["POST"])
 def get_services():
@@ -84,15 +83,11 @@ def get_services():
     data_from_db = cursor.execute("select * from products where type = 'услуга'")
     data_from_db = cursor.fetchall()
 
-    '''
-    category = cursor.execute("select * from products_categories where type = 'услуга'")
+    category = cursor.execute("select * from products_categories")
     category = cursor.fetchall()
     categories = {}
     for i in range(len(category)):
         categories[category[i][0]] = category[i][1]
-    '''
-
-    categories = {5: "Гробовщик", 6: "Бальзамировщик", 7: "Водитель", 8: "Священник", 9: "Психолог"}
 
     if data_from_db is None:
         out_data.append({})
@@ -106,7 +101,7 @@ def get_services():
             out_data[i]["category"] = categories[data_from_db[i - 1][2]]
             out_data[i]["cost_for_one"] = data_from_db[i - 1][4]
 
-    return json.dump(out_data)
+    return json.dumps(out_data)
 
 #conn.close()
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 requirements.txt
 env
+server/datababase.ini
 server/database.ini
 server/try.py
 __pycache__

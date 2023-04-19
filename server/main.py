@@ -24,84 +24,118 @@ def config(filename='database.ini', section='postgresql'):
 params = config()
 conn = psycopg2.connect(**params)
 
-@app.route("/signin", methods=["POST"])
-def sign_in():
+@app.route("/signIn", methods=["POST"])
+def signIn():
     cursor = conn.cursor()
-    json_in_data = json.loads(request.get_data())
-    login = json_in_data["login"]
-    password = json_in_data["password"]
-    out_data = {}
+    jsonInData = json.loads(request.get_data())
+    login = jsonInData["login"]
+    password = jsonInData["password"]
+    outData = {}
 
-    data_from_db = cursor.execute("select * from users where login = '{0}' and password = '{1}'".format(login, password))
-    data_from_db = cursor.fetchone()
-    # print(data_from_db)
+    dataFromDb = cursor.execute("select * from users where login = '{0}' and password = '{1}'".format(login, password))
+    dataFromDb = cursor.fetchone()
 
-    if data_from_db is None:
-        out_data["user_found"] = False
+    if dataFromDb is None:
+        outData["user_found"] = False
     else:
-        out_data["user_found"] = True
-        out_data["status"] = data_from_db[1]
+        outData["user_found"] = True
+        outData["status"] = dataFromDb[1]
 
-    return json.dumps(out_data)
+    return json.dumps(outData)
 
 @app.route("/products", methods=["POST"])
-def get_products():
+def getProducts():
     cursor = conn.cursor()
-    out_data = []
-    data_from_db = cursor.execute("select * from products where type = 'товар'")
-    data_from_db = cursor.fetchall()
+    outData = []
+    dataFromDb = cursor.execute("select * from products where type = 'товар'")
+    dataFromDb = cursor.fetchall()
 
-    category = cursor.execute("select * from products_categories")
-    category = cursor.fetchall()
+    categoriesFromDb = cursor.execute("select * from products_categories")
+    categoriesFromDb = cursor.fetchall()
     categories = {}
-    for i in range(len(category)):
-        categories[category[i][0]] = category[i][1]
-    
-    print(categories)
+    for i in range(len(categoriesFromDb)):
+        categories[categoriesFromDb[i][0]] = categoriesFromDb[i][1]
 
-    if data_from_db is None:
-        out_data.append({})
-        out_data[0]["products_found"] = False
+    if dataFromDb is None:
+        outData.append({})
+        outData[0]["products_found"] = False
     else:
-        out_data.append({})
-        out_data[0]["products_found"] = True
-        for i in range(1, len(data_from_db) + 1):
-            if data_from_db[i - 1][3] > 0:
-                out_data.append({})
-                out_data[i]["id"] = data_from_db[i - 1][0]
-                out_data[i]["category"] = categories[data_from_db[i - 1][2]]
-                out_data[i]["amount"] = data_from_db[i - 1][3]
-                out_data[i]["cost_for_one"] = data_from_db[i - 1][4]
-                out_data[i]["details"] = data_from_db[i - 1][5]
+        outData.append({})
+        outData[0]["products_found"] = True
+        for i in range(1, len(dataFromDb) + 1):
+            if dataFromDb[i - 1][3] > 0:
+                outData.append({})
+                outData[i]["id"] = dataFromDb[i - 1][0]
+                outData[i]["category"] = categories[dataFromDb[i - 1][2]]
+                outData[i]["amount"] = dataFromDb[i - 1][3]
+                outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
+                outData[i]["details"] = dataFromDb[i - 1][5]
 
-    return json.dumps(out_data)
+    return json.dumps(outData)
 
 @app.route("/services", methods=["POST"])
-def get_services():
+def getServices():
     cursor = conn.cursor()
-    out_data = []
-    data_from_db = cursor.execute("select * from products where type = 'услуга'")
-    data_from_db = cursor.fetchall()
+    outData = []
+    dataFromDb = cursor.execute("select * from products where type = 'услуга'")
+    dataFromDb = cursor.fetchall()
 
-    category = cursor.execute("select * from products_categories")
-    category = cursor.fetchall()
+    categoriesFromDb = cursor.execute("select * from products_categories")
+    categoriesFromDb = cursor.fetchall()
     categories = {}
-    for i in range(len(category)):
-        categories[category[i][0]] = category[i][1]
+    for i in range(len(categoriesFromDb)):
+        categories[categoriesFromDb[i][0]] = categoriesFromDb[i][1]
 
-    if data_from_db is None:
-        out_data.append({})
-        out_data[0]["services_found"] = False
+    if dataFromDb is None:
+        outData.append({})
+        outData[0]["services_found"] = False
     else:
-        out_data.append({})
-        out_data[0]["services_found"] = True
-        for i in range(1, len(data_from_db) + 1):
-            out_data.append({})
-            out_data[i]["id"] = data_from_db[i - 1][0]
-            out_data[i]["category"] = categories[data_from_db[i - 1][2]]
-            out_data[i]["cost_for_one"] = data_from_db[i - 1][4]
+        outData.append({})
+        outData[0]["services_found"] = True
+        for i in range(1, len(dataFromDb) + 1):
+            outData.append({})
+            outData[i]["id"] = dataFromDb[i - 1][0]
+            outData[i]["category"] = categories[dataFromDb[i - 1][2]]
+            outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
 
-    return json.dumps(out_data)
+    return json.dumps(outData)
+
+@app.route("/ordersForManager", methods=["POST"])
+def getOrdersForManager():
+    cursor = conn.cursor()
+    outData = []
+    dataFromDb = cursor.execute("select * from orders")
+    dataFromDb = cursor.fetchall()
+
+    clientsFromDb = cursor.execute("select * from users where status = 'клиент'")
+    clientsFromDb = cursor.fetchall()
+    clientsFio = {}
+    for i in range(len(clientsFromDb)):
+        clientsFio[clientsFromDb[i][0]] = clientsFromDb[i][4]
+
+    if dataFromDb is None:
+        outData.append()
+        outData[0]["ordersFound"] = False
+    else:
+        outData.append({})
+        outData[0]["ordersFound"] = True
+        for i in range(1, len(dataFromDb) + 1):
+            outData.append({})
+            outData[i]["id"] = dataFromDb[i - 1][0]
+            outData[i]["clientsFio"] = clientsFio[dataFromDb[i - 1][1]]
+            outData[i]["price"] = dataFromDb[i - 1][3]
+            outData[i]["status"] = dataFromDb[i - 1][4]
+            outData[i]["address"] = dataFromDb[i - 1][5]
+            outData[i]["deadmansName"] = dataFromDb[i - 1][6]
+            outData[i]["deadmansPassport"] = dataFromDb[i - 1][7]
+
+    return json.dumps(outData)
+
+@app.route("/ordersOfClient", methods=["POST"])
+def getOrdersOfClient():
+    cursor = conn.cursor()
+    jsonInData = json.loads(request.get_data())
+    clientId = jsonInData["clientId"]
 
 #conn.close()
 if __name__ == '__main__':

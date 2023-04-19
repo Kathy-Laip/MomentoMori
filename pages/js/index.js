@@ -54,3 +54,5 @@ const btnClick = () => {
     user = new User({login: log, password: pas})
     user.authorization()
 }
+
+module.exports = User

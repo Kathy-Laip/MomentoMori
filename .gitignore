@@ -3,3 +3,4 @@ env
 server/database.ini
 server/try.py
 __pycache__
+package.json

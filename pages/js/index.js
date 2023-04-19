@@ -8,7 +8,7 @@ class User {
     }
 
     async authorization(){
-        let response = await fetch("/signin", {
+        let response = await fetch("/signIn", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -35,12 +35,14 @@ class User {
 
 class Manager {
     constructor(options){
+        // super(options)
         this.id = options.id
     }
 }
 
 class Client {
     constructor(options){
+        // super(options)
         this.id = options.id
     }
 }

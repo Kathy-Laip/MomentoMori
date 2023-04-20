@@ -70,6 +70,7 @@ def getProducts():
                 outData[i]["amount"] = dataFromDb[i - 1][3]
                 outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
                 outData[i]["details"] = dataFromDb[i - 1][5]
+                outData[i]["image_link"] = dataFromDb[i - 1][6]
 
     return json.dumps(outData)
 
@@ -164,7 +165,59 @@ def getOrdersOfClient():
             outData[i]["deadmansPassport"] = dataFromDb[i - 1][7]
 
     return json.dumps(outData)
-            
+    
+@app.route("/allProducts", methods=["POST"])
+def getProductsAndServices():
+    cursor = conn.cursor()
+    outData = []
+    dataFromDb = cursor.execute("select * from products")
+    dataFromDb = cursor.fetchall()
+
+    categoriesFromDb = cursor.execute("select * from products_categories")
+    categoriesFromDb = cursor.fetchall()
+    categories = {}
+    for i in range(len(categoriesFromDb)):
+        categories[categoriesFromDb[i][0]] = categoriesFromDb[i][1]
+
+    if dataFromDb is None:
+        outData.append({})
+        outData[0]["items_found"] = False
+    else:
+        outData.append({})
+        outData[0]["items_found"] = True
+        for i in range(1, len(dataFromDb) + 1):
+            outData.append({})
+            outData[i]["id"] = dataFromDb[i - 1][0]
+            outData[i]["type"] = dataFromDb[i - 1][1]
+            outData[i]["category"] = categories[dataFromDb[i - 1][2]]
+            outData[i]["amount"] = dataFromDb[i - 1][3]
+            outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
+            outData[i]["details"] = dataFromDb[i - 1][5]
+            outData[i]["image_link"] = dataFromDb[i - 1][6]
+
+    return json.dumps(outData)
+
+'''
+@app.route("/productsToOrder", methods=["POST"])
+def insertProductsToBuy():
+    cursor = conn.cursor()
+    jsonInData = json.loads(request.get_data())
+    inDataCategory = jsonInData["product_category"]
+    inDataName = jsonInData["product_name"]
+    inDataAmount = jsonInData["product_amount"]
+
+    categoriesFromDb = cursor.execute("select * from products_categories")
+    categoriesFromDb = cursor.fetchall()
+    categories = {}
+    for i in range(len(categoriesFromDb)):
+        categories[categoriesFromDb[i][1]] = categoriesFromDb[i][0]
+    
+    dataToDb = {}
+    #dataToDb["product_category"] = categories[inDataCategory]
+    
+    dataToDb["product_id"] = 
+    dataToDb["amount"] = inDataAmount
+'''
 
 #conn.close()
 if __name__ == '__main__':

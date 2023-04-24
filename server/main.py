@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, session, jsonify
 import psycopg2
 # import flask_login
 import json
-# from config import Config
 import numpy as np
 from configparser import ConfigParser
 
@@ -10,6 +9,9 @@ app = Flask(__name__, template_folder='../pages', static_folder='../pages')
 # app.secret_key = 'your_secret_key'
 
 
+'''
+Функция, возвращающая параметры базы данных для подключения.
+'''
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
@@ -26,6 +28,10 @@ params = config()
 conn = psycopg2.connect(**params)
 
 
+'''
+Функция для авторизации пользователя. Принимает логин и пароль для входа, возвращает информацию, найден ли пользователь,
+его статус и id, если найден.
+'''
 @app.route("/signIn", methods=["POST"])
 def signIn():
     cursor = conn.cursor()
@@ -42,10 +48,15 @@ def signIn():
     else:
         outData["userFound"] = True
         outData["status"] = dataFromDb[1]
+        outData["id"] = dataFromDb[0]
 
     return json.dumps(outData)
 
 
+'''
+Функция получения информации о товарах в наличии. Ничего не принимает, возвращает информацию, найдены ли товары в наличии, и массив данных 
+о найденных товарах: id товара, категория, количество на складе, стоимость за единицу товара, детали и ссылку на картинку товара.
+'''
 @app.route("/products", methods=["POST"])
 def getProducts():
     cursor = conn.cursor()
@@ -78,6 +89,10 @@ def getProducts():
     return json.dumps(outData)
 
 
+'''
+Функция получения информации о доступных услугах. Ничего не принимает, возвращает информацию о том, найдены ли услуги, и массив данных
+о доступных услугах: id услуги, категория, стоимость услуги.
+'''
 @app.route("/services", methods=["POST"])
 def getServices():
     cursor = conn.cursor()
@@ -106,6 +121,10 @@ def getServices():
     return json.dumps(outData)
 
 
+'''
+Функция получения информации обо всех заказах для менеджера. Ничего не получает, возвращает информацию о том, найдены ли заказы, и массив данных
+о найденных заказах: id заказа, ФИО заказчика, общую стоимость, статус заказа, адрес доставки, ФИО покойного, данные паспорта покойного.
+'''
 @app.route("/ordersForManager", methods=["POST"])
 def getOrdersForManager():
     cursor = conn.cursor()
@@ -138,6 +157,10 @@ def getOrdersForManager():
     return json.dumps(outData)
 
 
+'''
+Функция получения информации обо всех заказах клиента. Получает id клиента, возвращает информацию о том, найдены ли заказы, и массив данных
+о найденных заказах: id заказа, ФИО менеджера, общая стоимость, статус заказа, адрес доставки, ФИО покойного, данные паспорта покойного.
+'''
 @app.route("/ordersOfClient", methods=["POST"])
 def getOrdersOfClient():
     cursor = conn.cursor()
@@ -173,6 +196,10 @@ def getOrdersOfClient():
     return json.dumps(outData)
 
 
+'''
+Функция получения информации обо всех товарах и услугах. Ничего не получает, возвращает информацию о том, найдены ли товары и услуги, и массив
+данных о найденных товарах и услугах: id, тип, категория, количество, стоимость единицы, детали, ссылка на изображение.
+'''
 @app.route("/allProducts", methods=["POST"])
 def getProductsAndServices():
     cursor = conn.cursor()

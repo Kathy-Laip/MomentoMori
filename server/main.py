@@ -9,6 +9,7 @@ from configparser import ConfigParser
 app = Flask(__name__, template_folder='../pages', static_folder='../pages')
 # app.secret_key = 'your_secret_key'
 
+
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
@@ -23,6 +24,7 @@ def config(filename='database.ini', section='postgresql'):
 
 params = config()
 conn = psycopg2.connect(**params)
+
 
 @app.route("/signIn", methods=["POST"])
 def signIn():
@@ -42,6 +44,7 @@ def signIn():
         outData["status"] = dataFromDb[1]
 
     return json.dumps(outData)
+
 
 @app.route("/products", methods=["POST"])
 def getProducts():
@@ -74,6 +77,7 @@ def getProducts():
 
     return json.dumps(outData)
 
+
 @app.route("/services", methods=["POST"])
 def getServices():
     cursor = conn.cursor()
@@ -100,6 +104,7 @@ def getServices():
             outData[i]["costForOne"] = dataFromDb[i - 1][4]
 
     return json.dumps(outData)
+
 
 @app.route("/ordersForManager", methods=["POST"])
 def getOrdersForManager():
@@ -131,6 +136,7 @@ def getOrdersForManager():
             outData[i]["deadmansPassport"] = dataFromDb[i - 1][7]
 
     return json.dumps(outData)
+
 
 @app.route("/ordersOfClient", methods=["POST"])
 def getOrdersOfClient():
@@ -165,7 +171,8 @@ def getOrdersOfClient():
             outData[i]["deadmansPassport"] = dataFromDb[i - 1][7]
 
     return json.dumps(outData)
-    
+
+
 @app.route("/allProducts", methods=["POST"])
 def getProductsAndServices():
     cursor = conn.cursor()

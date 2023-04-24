@@ -19,11 +19,11 @@ async function getProducts(dataAboutServices){
 
     function insertINtoProducts(infoServices){
         var container = document.getElementById('services')
-        if(infoServices[0].services_found){
+        if(infoServices[0].servicesFound){
             for(let i = 1; i < infoServices.length; i++){
                 var textServices = `<div class="containerServices">
                 <div class="textServices">
-                ${infoServices[i].category} <br> ${infoServices[i].cost_for_one} рублей
+                ${infoServices[i].category} <br> ${infoServices[i].costForOne} рублей
                 </div>
             </div>  <div class="containerForProduct" style="background-color: rgba(0,0,0,0.0); height: 30px; bottom: 0;"></div>`
                 container.innerHTML += textServices

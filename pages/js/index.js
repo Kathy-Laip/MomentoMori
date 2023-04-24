@@ -18,7 +18,7 @@ class User {
         let result = await response.json()
     
 
-        if (result.user_found == true){
+        if (result.userFound == true){
             alert('Вы вошли!')
             if(result.status == "клиент"){
                 client = new Client({id: result.id})
@@ -57,4 +57,4 @@ const btnClick = () => {
     user.authorization()
 }
 
-module.exports = User
+// module.exports = User

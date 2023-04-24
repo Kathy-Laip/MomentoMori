@@ -216,12 +216,14 @@ def getProductsAndServices():
         categories[categoriesFromDb[i][0]] = categoriesFromDb[i][1]
         allCategories.append(categoriesFromDb[i][1])
 
+    print(allCategories)
     if dataFromDb is None:
         outData.append({})
         outData[0]["itemsFound"] = False
     else:
         outData.append({})
         outData[0]["itemsFound"] = True
+        outData.append({})
         outData[1]["products"] = allCategories
         for i in range(2, len(dataFromDb) + 2):
             outData.append({})

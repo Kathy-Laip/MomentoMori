@@ -211,8 +211,10 @@ def getProductsAndServices():
     categoriesFromDb = cursor.execute("select * from products_categories")
     categoriesFromDb = cursor.fetchall()
     categories = {}
+    allCategories = []
     for i in range(len(categoriesFromDb)):
         categories[categoriesFromDb[i][0]] = categoriesFromDb[i][1]
+        allCategories.append(categoriesFromDb[i][1])
 
     if dataFromDb is None:
         outData.append({})
@@ -220,38 +222,54 @@ def getProductsAndServices():
     else:
         outData.append({})
         outData[0]["itemsFound"] = True
-        for i in range(1, len(dataFromDb) + 1):
+        outData[1]["products"] = allCategories
+        for i in range(2, len(dataFromDb) + 2):
             outData.append({})
-            outData[i]["id"] = dataFromDb[i - 1][0]
-            outData[i]["type"] = dataFromDb[i - 1][1]
-            outData[i]["category"] = categories[dataFromDb[i - 1][2]]
-            outData[i]["amount"] = dataFromDb[i - 1][3]
-            outData[i]["costForOne"] = dataFromDb[i - 1][4]
-            outData[i]["details"] = dataFromDb[i - 1][5]
-            outData[i]["imageLink"] = dataFromDb[i - 1][6]
+            outData[i]["id"] = dataFromDb[i - 2][0]
+            outData[i]["type"] = dataFromDb[i - 2][1]
+            outData[i]["category"] = categories[dataFromDb[i - 2][2]]
+            outData[i]["amount"] = dataFromDb[i - 2][3]
+            outData[i]["costForOne"] = dataFromDb[i - 2][4]
+            outData[i]["details"] = dataFromDb[i - 2][5]
+            outData[i]["imageLink"] = dataFromDb[i - 2][6]
 
     return json.dumps(outData)
 
 '''
+
 @app.route("/productsToOrder", methods=["POST"])
 def insertProductsToBuy():
     cursor = conn.cursor()
     jsonInData = json.loads(request.get_data())
-    inDataCategory = jsonInData["product_category"]
-    inDataName = jsonInData["product_name"]
-    inDataAmount = jsonInData["product_amount"]
+    inDataCategory = jsonInData["productName"]
+    inDataDetails = jsonInData["productDetails"]
+    inDataAmount = jsonInData["productAmount"]
 
     categoriesFromDb = cursor.execute("select * from products_categories")
     categoriesFromDb = cursor.fetchall()
     categories = {}
     for i in range(len(categoriesFromDb)):
         categories[categoriesFromDb[i][1]] = categoriesFromDb[i][0]
+
+    productId = cursor.execute("select id from products where category = '{0}' and details = '{1}'".format(
+            categories[inDataCategory], inDataDetails
+        ))
+    productId = cursor.fetchall()
     
     dataToDb = {}
-    #dataToDb["product_category"] = categories[inDataCategory]
-    
-    dataToDb["product_id"] = 
+    dataToDb["productId"] = productId
     dataToDb["amount"] = inDataAmount
+    
+    isOrderInDbFromDb = cursor.execute('select * from products_to_buy where "product_ID" = {0}'.format(productId))
+    isOrderInDbFromDb = cursor.fetchall()
+    if isOrderInDbFromDb is None:
+        ids = cursor.execute('select max(id) from products_to_buy')
+        ids = cursor.fetchone()
+        cursor.execute("insert into products_to_buy values ({0}, {1}, {2})".format(productId, inDataAmount))
+    else:
+        cursor.execute("update products_to_buy set amount = {0} where id = {1}".format(
+            isOrderInDbFromDb[2] + inDataAmount, id = isOrderInDbFromDb[0]
+        ))
 '''
 
 #conn.close()

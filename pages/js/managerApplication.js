@@ -22,8 +22,8 @@ async function getStuff(dataStuff){
     function insertIntoStuffInCategory(infoStuff){
         var container = document.getElementById('category')
         if(infoStuff[0].itemsFound){
-            for(let i = 1; i < infoStuff.length; i++){
-                var textProduct = `<option value="${infoStuff[i].category}">${infoStuff[i].category}</option>`
+            for(let i = 0; i < infoStuff[1].products.length; i++){
+                var textProduct = `<option value="${infoStuff[1].products[i]}">${infoStuff[1].products[i]}</option>`
                 container.innerHTML += textProduct
             }
         }
@@ -34,12 +34,12 @@ async function getStuff(dataStuff){
         productChange.innerHTML = '<option value=""></option>'
         let type = this.value
 
-        var productType = infoStuff.stuff.filter(obj => obj.type === type)
+        var productType = infoStuff.filter(obj => obj.category === type)
         for(let pos of productType){
             if(pos.description === null){
                 continue
             } else {
-                productChange.innerHTML += `<option value="${pos.description}">${pos.description}</option>`
+                productChange.innerHTML += `<option value="${pos.details}">${pos.details}</option>`
             }
         }
     })
@@ -51,11 +51,12 @@ async function getStuff(dataStuff){
         var btnOF = document.querySelector('.arrange')
         var price
 
-        for (let product of infoStuff.stuff){
-            if(product.type == categoryProduct && product.description == nameProduct){
-                price = product.cost * Number(countProduct)
-            }
-        }
+        // for (let product = 2; product < infoStuff.length; product++){
+        //     if(infoStuff[product].category == categoryProduct && infoStuff[product].type == nameProduct){
+        //         console.log(infoStuff[product].costForOne)
+        //         price = infoStuff[product].costForOne * Number(countProduct)
+        //     }
+        // }
 
         var listProduct = document.querySelector('.listOfProducts')
         listProduct.innerHTML += `<div class="containerForProduct">

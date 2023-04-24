@@ -75,7 +75,7 @@ def getProducts():
         outData[0]["productsFound"] = False
     else:
         outData.append({})
-        outData[0]["products_found"] = True
+        outData[0]["productsFound"] = True
         for i in range(1, len(dataFromDb) + 1):
             if dataFromDb[i - 1][3] > 0:
                 outData.append({})
@@ -168,8 +168,9 @@ def getOrdersOfClient():
     clientId = jsonInData["client_id"]
     outData = []
 
-    dataFromDb = cursor.execute("select * from orders where client_ID = '{0}'".format(clientId))
+    dataFromDb = cursor.execute('select * from orders where "client_ID" = {0}'.format(clientId))
     dataFromDb = cursor.fetchall()
+    print(dataFromDb)
 
     managersFromDb = cursor.execute("select * from users where status = 'менеджер'")
     managersFromDb = cursor.fetchall()
@@ -186,7 +187,7 @@ def getOrdersOfClient():
         for i in range(1, len(dataFromDb) + 1):
             outData.append({})
             outData[i]["id"] = dataFromDb[i - 1][0]
-            outData[i]["managerFio"] = managersFio[dataFromDb[i - 1][1]]
+            outData[i]["managerFio"] = managersFio[dataFromDb[i - 1][2]]
             outData[i]["price"] = dataFromDb[i - 1][3]
             outData[i]["status"] = dataFromDb[i - 1][4]
             outData[i]["address"] = dataFromDb[i - 1][5]

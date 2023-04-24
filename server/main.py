@@ -36,9 +36,9 @@ def signIn():
     dataFromDb = cursor.fetchone()
 
     if dataFromDb is None:
-        outData["user_found"] = False
+        outData["userFound"] = False
     else:
-        outData["user_found"] = True
+        outData["userFound"] = True
         outData["status"] = dataFromDb[1]
 
     return json.dumps(outData)
@@ -58,7 +58,7 @@ def getProducts():
 
     if dataFromDb is None:
         outData.append({})
-        outData[0]["products_found"] = False
+        outData[0]["productsFound"] = False
     else:
         outData.append({})
         outData[0]["products_found"] = True
@@ -68,9 +68,9 @@ def getProducts():
                 outData[i]["id"] = dataFromDb[i - 1][0]
                 outData[i]["category"] = categories[dataFromDb[i - 1][2]]
                 outData[i]["amount"] = dataFromDb[i - 1][3]
-                outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
+                outData[i]["costForOne"] = dataFromDb[i - 1][4]
                 outData[i]["details"] = dataFromDb[i - 1][5]
-                outData[i]["image_link"] = dataFromDb[i - 1][6]
+                outData[i]["imageLink"] = dataFromDb[i - 1][6]
 
     return json.dumps(outData)
 
@@ -89,15 +89,15 @@ def getServices():
 
     if dataFromDb is None:
         outData.append({})
-        outData[0]["services_found"] = False
+        outData[0]["servicesFound"] = False
     else:
         outData.append({})
-        outData[0]["services_found"] = True
+        outData[0]["servicesFound"] = True
         for i in range(1, len(dataFromDb) + 1):
             outData.append({})
             outData[i]["id"] = dataFromDb[i - 1][0]
             outData[i]["category"] = categories[dataFromDb[i - 1][2]]
-            outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
+            outData[i]["costForOne"] = dataFromDb[i - 1][4]
 
     return json.dumps(outData)
 
@@ -181,19 +181,19 @@ def getProductsAndServices():
 
     if dataFromDb is None:
         outData.append({})
-        outData[0]["items_found"] = False
+        outData[0]["itemsFound"] = False
     else:
         outData.append({})
-        outData[0]["items_found"] = True
+        outData[0]["itemsFound"] = True
         for i in range(1, len(dataFromDb) + 1):
             outData.append({})
             outData[i]["id"] = dataFromDb[i - 1][0]
             outData[i]["type"] = dataFromDb[i - 1][1]
             outData[i]["category"] = categories[dataFromDb[i - 1][2]]
             outData[i]["amount"] = dataFromDb[i - 1][3]
-            outData[i]["cost_for_one"] = dataFromDb[i - 1][4]
+            outData[i]["costForOne"] = dataFromDb[i - 1][4]
             outData[i]["details"] = dataFromDb[i - 1][5]
-            outData[i]["image_link"] = dataFromDb[i - 1][6]
+            outData[i]["imageLink"] = dataFromDb[i - 1][6]
 
     return json.dumps(outData)
 

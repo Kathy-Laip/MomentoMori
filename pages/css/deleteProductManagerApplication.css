@@ -1,0 +1,20 @@
+.deleteLesson{
+    position: absolute !important;
+    font-size: 64px !important;
+    text-align: center !important;
+    /* content: "\00d7"; */
+    top: 0% !important;
+    right: 5% !important;
+    width: 5% !important;
+    height: 40% !important;
+    background-color: transparent !important;
+    opacity: 80% !important;
+    border: none !important;
+    color: var(--black) !important;
+    z-index: 5;
+    /* margin: auto !important; */
+}
+
+.deleteLesson:hover{
+    color: var(--chocolate) !important;
+}

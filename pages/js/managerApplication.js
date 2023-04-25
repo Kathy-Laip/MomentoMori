@@ -81,14 +81,25 @@ async function getStuff(dataStuff){
         }
         else {
             listProduct.innerHTML += `<div class="containerForProduct">
+            <button class='deleteLesson'>&times;</button>
         <div class="textForProduct">
             ${categoryProduct} <br> Детали: ${nameProduct} <br> Цена: ${price} рублей <br> Количество: ${countProduct}
         </div>
     </div>
     `
         }
+
+        
+        var deleteLesson = document.getElementsByClassName("deleteLesson");
+        for(let i = 0; i < deleteLesson.length; i++){
+            deleteLesson[i].addEventListener('click',  function(e) {
+                var parent = e.target.closest(".containerForProduct")
+                parent.closest(".containerForProduct").remove();
+            }, false)
+    }
     // <div class="containerForProduct" style="background-color: rgba(0,0,0,0.0); height: 30px; bottom: 0;"></div>`
-    }) 
+    })
+
 }
 
 request.send()

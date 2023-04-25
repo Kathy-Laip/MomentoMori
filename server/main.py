@@ -247,14 +247,16 @@ def checkAmountInStorage():
     jsonInData = json.loads(request.get_data())
     productId = jsonInData["productId"]
     desiredAmount = jsonInData["productAmount"]
+    outData = {}
     
     dataFromDb = cursor.execute("select amount from products where id = {0}".format(productId))
     dataFromDb = cursor.fetchone()
 
     if dataFromDb >= desiredAmount:
-        outData = (True)
+        outData["enoughAmount"] = True
     else:
-        outData = (False, dataFromDb)
+        outData["enoughAmount"] = False
+        outData["amountInStorage"] = dataFromDb
 
     return json.dumps(outData)
 

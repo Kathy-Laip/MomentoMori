@@ -166,9 +166,20 @@ async function getStuff(dataStuff){
         }
     })
 
+    
     document.querySelector('.arrange').addEventListener('click', (listProduct) => {
-        sessionStorage.setItem('product', JSON.stringify(product))
-        window.location.href = '/pages/managerEstimate.html'
+        let nameDeceased = document.getElementById('nameDeceased').value
+        let dateOfDeath = document.getElementById('dateOfDeath').value
+        let dataPassport = document.getElementById('dataPassport').value
+        let clientName = document.getElementById('clientName').value
+        let dataPassportClient = document.getElementById('dataPassportClient').value
+        let address = document.getElementById('address').value
+
+        let masInfo = [nameDeceased, dateOfDeath, dataPassport, clientName, dataPassportClient, address]
+        if(masInfo.every(element => element !== '')){
+            sessionStorage.setItem('product', JSON.stringify(product))
+            window.location.href = '/pages/managerEstimate.html'
+        } else alert('Заполните все поля!')
     })
 
 }

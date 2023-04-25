@@ -165,7 +165,7 @@ def getOrdersForManager():
 def getOrdersOfClient():
     cursor = conn.cursor()
     jsonInData = json.loads(request.get_data())
-    clientId = jsonInData["client_id"]
+    clientId = jsonInData["clientId"]
     outData = []
 
     dataFromDb = cursor.execute('select * from orders where "client_ID" = {0}'.format(clientId))
@@ -252,11 +252,12 @@ def checkAmountInStorage():
     dataFromDb = cursor.execute("select amount from products where id = {0}".format(productId))
     dataFromDb = cursor.fetchone()
 
-    if dataFromDb >= desiredAmount:
+    if dataFromDb[0] >= int(desiredAmount):
         outData["enoughAmount"] = True
     else:
         outData["enoughAmount"] = False
-        outData["amountInStorage"] = dataFromDb
+        outData["amountInStorage"] = dataFromDb[0]
+    print(outData)
 
     return json.dumps(outData)
 

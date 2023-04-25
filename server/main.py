@@ -237,6 +237,10 @@ def getProductsAndServices():
     return json.dumps(outData)
 
 
+'''
+Функция проверки количества определенного товара на складе для формирования заявки. Принимает id товара и желаемое количество. 
+Возвращает информацию о том, достаточно ли количества, а также количество на складе, если не достаточно.
+'''
 @app.route("/checkAmount", methods=["POST"])
 def checkAmountInStorage():
     cursor = conn.cursor()
@@ -248,7 +252,7 @@ def checkAmountInStorage():
     dataFromDb = cursor.fetchone()
 
     if dataFromDb >= desiredAmount:
-        outData = (True, desiredAmount)
+        outData = (True)
     else:
         outData = (False, dataFromDb)
 

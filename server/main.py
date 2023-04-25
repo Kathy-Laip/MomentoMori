@@ -170,7 +170,6 @@ def getOrdersOfClient():
 
     dataFromDb = cursor.execute('select * from orders where "client_ID" = {0}'.format(clientId))
     dataFromDb = cursor.fetchall()
-    print(dataFromDb)
 
     managersFromDb = cursor.execute("select * from users where status = 'менеджер'")
     managersFromDb = cursor.fetchall()
@@ -237,8 +236,26 @@ def getProductsAndServices():
 
     return json.dumps(outData)
 
-'''
 
+@app.route("/checkAmount", methods=["POST"])
+def checkAmountInStorage():
+    cursor = conn.cursor()
+    jsonInData = json.loads(request.get_data())
+    productId = jsonInData["productId"]
+    desiredAmount = jsonInData["productAmount"]
+    
+    dataFromDb = cursor.execute("select amount from products where id = {0}".format(productId))
+    dataFromDb = cursor.fetchone()
+
+    if dataFromDb >= desiredAmount:
+        outData = (True, desiredAmount)
+    else:
+        outData = (False, dataFromDb)
+
+    return json.dumps(outData)
+
+
+'''
 @app.route("/productsToOrder", methods=["POST"])
 def insertProductsToBuy():
     cursor = conn.cursor()

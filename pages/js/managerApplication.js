@@ -50,21 +50,43 @@ async function getStuff(dataStuff){
         var countProduct = document.getElementById('count').value
         var btnOF = document.querySelector('.arrange')
         var price
+        var idProduct
+
+        console.log(categoryProduct, nameProduct)
 
         for (let i=2; i < infoStuff.length; i++){
-            if(infoStuff[i].category == categoryProduct && infoStuff[i].details == nameProduct){
-                console.log(infoStuff[i].costForOne)
-                price = infoStuff[i].costForOne * Number(countProduct)
+            if(infoStuff[i].category === categoryProduct && infoStuff[i].details === nameProduct){
+                idProduct = infoStuff[i].id
+                if(infoStuff[i].type == 'товар'){
+                    console.log(infoStuff[i].costForOne)
+                    price = infoStuff[i].costForOne * Number(countProduct)
+                } 
+            } else if(infoStuff[i].category === categoryProduct && infoStuff[i].details === null){
+                idProduct = infoStuff[i].id
+                if(infoStuff[i].type == 'услуга'){
+                    console.log(infoStuff[i].costForOne)
+                    price = infoStuff[i].costForOne
+                } 
             }
         }
 
+        
         var listProduct = document.querySelector('.listOfProducts')
-        listProduct.innerHTML += `<div class="containerForProduct">
+        if (nameProduct == 'null'){
+            listProduct.innerHTML += `<div class="containerForProduct">
         <div class="textForProduct">
-            ${categoryProduct} <br> ${nameProduct} <br> Цена: ${price} рублей <br> Количество: ${countProduct}
+            ${categoryProduct} <br>  Цена: ${price} рублей 
+        </div>
+    </div>`
+        }
+        else {
+            listProduct.innerHTML += `<div class="containerForProduct">
+        <div class="textForProduct">
+            ${categoryProduct} <br> Детали: ${nameProduct} <br> Цена: ${price} рублей <br> Количество: ${countProduct}
         </div>
     </div>
     `
+        }
     // <div class="containerForProduct" style="background-color: rgba(0,0,0,0.0); height: 30px; bottom: 0;"></div>`
     }) 
 }

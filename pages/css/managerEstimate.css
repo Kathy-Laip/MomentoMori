@@ -1,0 +1,15 @@
+.estimate{
+    position: absolute;
+    top: 20%;
+    left: 5%;
+
+    width: 90%;
+    font-size: 48px;
+    font-weight: 300;
+    font-style: normal;
+}
+
+table, th, td{
+    border: 1px solid var(--black);
+    border-collapse: collapse;
+}

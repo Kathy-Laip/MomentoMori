@@ -15,6 +15,8 @@ async function getStuff(dataStuff){
     var infoStuff = JSON.parse(dataStuff)
     console.log(infoStuff)
 
+    let product = []
+
     // console.log(sessionStorage.getItem('managerID'))
 
     insertIntoStuffInCategory(infoStuff)
@@ -73,13 +75,27 @@ async function getStuff(dataStuff){
         
         var listProduct = document.querySelector('.listOfProducts')
         if (nameProduct == 'null'){
+            let item = {
+                id: idProduct,
+                category: categoryProduct,
+                pr: price,
+                details: ''
+            }
             listProduct.innerHTML += `<div class="containerForProduct">
+            <button class='deleteLesson'>&times;</button>
         <div class="textForProduct">
             ${categoryProduct} <br>  Цена: ${price} рублей 
         </div>
     </div>`
+            product.push(item)
         }
         else {
+            let item = {
+                id: idProduct,
+                category: categoryProduct,
+                pr: price,
+                details: nameProduct
+            }
             listProduct.innerHTML += `<div class="containerForProduct">
             <button class='deleteLesson'>&times;</button>
         <div class="textForProduct">
@@ -87,17 +103,46 @@ async function getStuff(dataStuff){
         </div>
     </div>
     `
+            product.push(item)
         }
 
-        
+
         var deleteLesson = document.getElementsByClassName("deleteLesson");
         for(let i = 0; i < deleteLesson.length; i++){
             deleteLesson[i].addEventListener('click',  function(e) {
                 var parent = e.target.closest(".containerForProduct")
+
+                let br = parent.querySelectorAll('br')
+                console.log(br)
+                let text = parent.querySelector(".textForProduct").innerHTML
+                console.log(text)
+                if(br.length == 3){
+                    let category = text.split('<br>')[0].trim()
+                    let details = text.split('<br>')[1].split(':')[1].trim()
+                    
+                    for(let i = 0; i < product.length; i++){
+                        if(product[i].category == category && product[i].details == details){
+                            product.splice(i, 1)
+                        }
+                    }
+                } else if(br.length == 1){
+                    let category = text.split('<br>')[0].trim()
+
+                    for(let i = 0; i < product.length; i++){
+                        if(product[i].category == category){
+                            product.splice(i, 1)
+                        }
+                    }
+                }
+
                 parent.closest(".containerForProduct").remove();
             }, false)
-    }
-    // <div class="containerForProduct" style="background-color: rgba(0,0,0,0.0); height: 30px; bottom: 0;"></div>`
+        }
+    })
+
+    document.querySelector('.arrange').addEventListener('click', (listProduct) => {
+        sessionStorage.setItem('product', JSON.stringify(product))
+        window.location.href = '/pages/managerEstimate.html'
     })
 
 }

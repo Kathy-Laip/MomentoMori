@@ -96,14 +96,40 @@ async function getStuff(dataStuff){
                 pr: price,
                 details: nameProduct
             }
-            listProduct.innerHTML += `<div class="containerForProduct">
-            <button class='deleteLesson'>&times;</button>
-        <div class="textForProduct">
-            ${categoryProduct} <br> Детали: ${nameProduct} <br> Цена: ${price} рублей <br> Количество: ${countProduct}
-        </div>
-    </div>
-    `
-            product.push(item)
+
+            let info = {
+                productId: idProduct,
+                productAmount: countProduct
+            }
+
+            async function checkProduct(info){
+                let response = await fetch("/checkAmount", {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(info)
+                });
+                let res = await response.json()
+                return res
+            }
+            
+            let result = checkProduct(info)
+            result.then((info) => {
+                if(info.enoughAmount){
+                    listProduct.innerHTML += `<div class="containerForProduct">
+                    <button class='deleteLesson'>&times;</button>
+                <div class="textForProduct">
+                    ${categoryProduct} <br> Детали: ${nameProduct} <br> Цена: ${price} рублей <br> Количество: ${countProduct}
+                </div>
+            </div>
+            `
+                    product.push(item)
+                } else {
+                    alert(`Столько товаров, к сожалению неть, осталось: ${info.amountInStorage}`)
+                }
+            }
+            )
         }
 
 

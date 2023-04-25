@@ -17,7 +17,7 @@ const orders = []
 
 async function sendClinetID(){
     let clientID = {
-        client_id: client
+        clientId: client
     }
     let response = await fetch('/ordersOfClient', {
         method: 'POST',
@@ -27,7 +27,6 @@ async function sendClinetID(){
         body: JSON.stringify(clientID)
     });
     let result = await response.json()
-    console.log(result)
 
     if (result[0].ordersFound){
         for (let i = 1; i < result.length; i++){

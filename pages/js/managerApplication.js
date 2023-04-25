@@ -51,12 +51,12 @@ async function getStuff(dataStuff){
         var btnOF = document.querySelector('.arrange')
         var price
 
-        // for (let product = 2; product < infoStuff.length; product++){
-        //     if(infoStuff[product].category == categoryProduct && infoStuff[product].type == nameProduct){
-        //         console.log(infoStuff[product].costForOne)
-        //         price = infoStuff[product].costForOne * Number(countProduct)
-        //     }
-        // }
+        for (let i=2; i < infoStuff.length; i++){
+            if(infoStuff[i].category == categoryProduct && infoStuff[i].details == nameProduct){
+                console.log(infoStuff[i].costForOne)
+                price = infoStuff[i].costForOne * Number(countProduct)
+            }
+        }
 
         var listProduct = document.querySelector('.listOfProducts')
         listProduct.innerHTML += `<div class="containerForProduct">
@@ -64,7 +64,8 @@ async function getStuff(dataStuff){
             ${categoryProduct} <br> ${nameProduct} <br> Цена: ${price} рублей <br> Количество: ${countProduct}
         </div>
     </div>
-        <div class="containerForProduct" style="background-color: rgba(0,0,0,0.0); height: 30px; bottom: 0;"></div>`
+    `
+    // <div class="containerForProduct" style="background-color: rgba(0,0,0,0.0); height: 30px; bottom: 0;"></div>`
     }) 
 }
 

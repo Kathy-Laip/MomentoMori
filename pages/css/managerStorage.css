@@ -116,3 +116,19 @@
     color: var(--black);
     word-wrap: break-word;
 }
+
+.img{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+
+    width: 90%;
+    height: 80%;
+    max-width: 90%;
+    max-height: 80%;
+
+    display: flex;
+    object-fit: fill;
+    background-size: cover;
+
+}

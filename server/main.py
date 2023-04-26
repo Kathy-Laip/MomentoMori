@@ -215,7 +215,7 @@ def getProductsAndServices():
         categories[categoriesFromDb[i][0]] = categoriesFromDb[i][1]
         allCategories.append(categoriesFromDb[i][1])
 
-    print(allCategories)
+    # print(allCategories)
     if dataFromDb is None:
         outData.append({})
         outData[0]["itemsFound"] = False
@@ -257,7 +257,7 @@ def checkAmountInStorage():
     else:
         outData["enoughAmount"] = False
         outData["amountInStorage"] = dataFromDb[0]
-    print(outData)
+    # print(outData)
 
     return json.dumps(outData)
 

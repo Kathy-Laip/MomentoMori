@@ -262,6 +262,48 @@ def checkAmountInStorage():
     return json.dumps(outData)
 
 
+@app.route("/addOrder", methods = ["POST"])
+def addOrderToDb():
+    cursor = conn.cursor()
+    jsonInData = json.loads(request.get_data())
+    inAddress = jsonInData['info']['address']
+    inClientName = jsonInData['info']['clientName']
+    inDeadmansPassport = jsonInData['info']['dataPassport']
+    inPhoneClient = jsonInData['info']['phoneClient']
+    inDateOfDeath = jsonInData['info']['dateOfDeath']
+    inManagerId = jsonInData['info']['managerID']
+    inDeadmansName = jsonInData['info']['nameDeceased']
+
+    inProducts = []
+    totalPrice = 0
+    for i, prod in enumerate(jsonInData['products']):
+        inProducts.append({})
+        inProducts[i]['category'] = prod['category']
+        inProducts[i]['details'] = prod['details']
+        inProducts[i]['productId'] = prod['id']
+        inProducts[i]['productPrice'] = prod['pr']
+        totalPrice += prod['pr']
+        inProducts[i]['count'] = prod['count']
+
+    outData = {'addedFlag': False}
+    dataToDb = {}
+    client_id = cursor.execute(f"select id from users where phone = {inPhoneClient}")
+    client_id = cursor.fetchone()
+    dataToDb['client_ID'] = client_id
+    dataToDb['manager_ID'] = inManagerId
+    dataToDb['price'] = totalPrice
+    dataToDb['status'] = 'в обработке'
+    dataToDb['deadmans_name'] = inDeadmansName
+    dataToDb['deadmans_passport'] = inDeadmansPassport
+    
+    '''
+    try:
+    
+    return json.dumps(outData)
+    '''
+
+
+
 '''
 @app.route("/productsToOrder", methods=["POST"])
 def insertProductsToBuy():

@@ -38,6 +38,37 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: check_product_amount(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.check_product_amount() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+    BEGIN
+        CALL subtract_product_amount(NEW.amount, NEW."product_ID");
+        RETURN NEW;
+    END;
+    $$;
+
+
+ALTER FUNCTION public.check_product_amount() OWNER TO postgres;
+
+--
+-- Name: subtract_product_amount(integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.subtract_product_amount(IN integer, IN integer)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  UPDATE products SET amount = amount - $1 WHERE id = $2 AND type = 'товар';
+END;
+$_$;
+
+
+ALTER PROCEDURE public.subtract_product_amount(IN integer, IN integer) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -221,6 +252,20 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
+-- Name: users_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."users_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."users_ID_seq" OWNER TO postgres;
+
+--
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -292,11 +337,11 @@ COPY public.orders (id, "client_ID", "manager_ID", price, status, address, deadm
 --
 
 COPY public.orders_to_products ("order_ID", "product_ID", amount) FROM stdin;
-1	1	1
-2	1	1
 2	4	1
 3	1	1
 3	5	1
+1	1	1
+2	1	1
 \.
 
 
@@ -310,11 +355,11 @@ COPY public.products (id, type, category, amount, cost_for_one, details, image_l
 8	услуга	7	1	1000	\N	\N
 9	услуга	8	1	100	\N	\N
 10	услуга	9	1	2500	\N	\N
-1	товар	1	10	2000	черный	data:image/jpeg;base64
 2	товар	1	1	20000	с бархатом	data:image/jpeg;base64
 3	товар	2	50	300	розы	data:image/jpeg;base64
 4	товар	3	10	2000	каменная	https://mygranite.ru/upload/iblock/d20/vvmyb1w8osz9y27qd0he8ofh2k2t9aq6.jpg
 5	товар	4	1	100000	золотой	https://5ritual.ru/upload/product/kresty-na-mogilu/krest-derevyannyi-na-mogilu-005.jpg
+1	товар	1	8	2000	черный	data:image/jpeg;base64
 \.
 
 
@@ -386,6 +431,13 @@ SELECT pg_catalog.setval('public.products_to_buy_id_seq', 1, false);
 
 
 --
+-- Name: users_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."users_ID_seq"', 1, false);
+
+
+--
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -438,6 +490,13 @@ ALTER TABLE ONLY public.products_to_buy
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- Name: orders_to_products update_amount_of_ordered_products; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER update_amount_of_ordered_products AFTER INSERT ON public.orders_to_products FOR EACH ROW EXECUTE FUNCTION public.check_product_amount();
 
 
 --

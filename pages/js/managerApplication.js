@@ -79,7 +79,8 @@ async function getStuff(dataStuff){
                 id: idProduct,
                 category: categoryProduct,
                 pr: price,
-                details: ''
+                details: '',
+                count: 1
             }
             listProduct.innerHTML += `<div class="containerForProduct">
             <button class='deleteLesson'>&times;</button>
@@ -94,7 +95,8 @@ async function getStuff(dataStuff){
                 id: idProduct,
                 category: categoryProduct,
                 pr: price,
-                details: nameProduct
+                details: nameProduct,
+                count: Number(countProduct)
             }
 
             let info = {
@@ -172,13 +174,13 @@ async function getStuff(dataStuff){
         let dateOfDeath = document.getElementById('dateOfDeath').value
         let dataPassport = document.getElementById('dataPassport').value
         let clientName = document.getElementById('clientName').value
-        let dataPassportClient = document.getElementById('dataPassportClient').value
+        let phoneClient = document.getElementById('phoneClient').value
         let address = document.getElementById('address').value
 
-        let masInfo = [nameDeceased, dateOfDeath, dataPassport, clientName, dataPassportClient, address]
+        let masInfo = [nameDeceased, dateOfDeath, dataPassport, clientName, phoneClient, address]
         if(masInfo.every(element => element !== '')){
-            let manID = sessionStorage.getItem('managerID')
-            let masInfo = {"nameDeceased": nameDeceased, "dateOfDeath": dateOfDeath, "dataPassport": dataPassport, "clientName": clientName, "dataPassportClient": dataPassportClient, "address": address, "managerID": manID}
+            let manID = JSON.parse(sessionStorage.getItem('managerID'))
+            let masInfo = {"nameDeceased": nameDeceased, "dateOfDeath": dateOfDeath, "dataPassport": dataPassport, "clientName": clientName, "phoneClient": phoneClient, "address": address, "managerID": manID}
             sessionStorage.setItem('info', JSON.stringify(masInfo))
             sessionStorage.setItem('product', JSON.stringify(product))
             window.location.href = '/pages/managerEstimate.html'

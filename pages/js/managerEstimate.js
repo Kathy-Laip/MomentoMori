@@ -31,7 +31,7 @@ btnP.addEventListener('click', function(){
             "info": info,
             "products": products
         }
-        let response = await fetch('/addEstimate', {
+        let response = await fetch('/addOrder', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

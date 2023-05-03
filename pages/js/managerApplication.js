@@ -169,7 +169,7 @@ async function getStuff(dataStuff){
     })
 
     
-    document.querySelector('.arrange').addEventListener('click', (listProduct) => {
+    document.querySelector('.arrange').addEventListener('click', () => {
         let nameDeceased = document.getElementById('nameDeceased').value
         let dateOfDeath = document.getElementById('dateOfDeath').value
         let dataPassport = document.getElementById('dataPassport').value

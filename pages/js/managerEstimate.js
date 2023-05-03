@@ -40,7 +40,7 @@ btnP.addEventListener('click', function(){
         });
         let result = await response.json()
 
-        if (result.response == true){
+        if (result.addedFlag == true){
             alert ('Заказ оформлен!')
             window.location.href = '/pages/managerStorage.html'
         } else alert('Ошибка отправки данных, попробуйте позднее!')

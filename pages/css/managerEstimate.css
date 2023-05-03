@@ -13,3 +13,25 @@ table, th, td{
     border: 1px solid var(--black);
     border-collapse: collapse;
 }
+
+.btnPay{
+    position: absolute;
+    /* top: 135%; */
+    right: 5%; 
+    float: right;
+
+    width: 27%;
+    height: 45px;
+
+    color: var(--black);
+    background-color: var(--brown);
+    border: none;
+
+    font-size: 28px;
+    text-align: center;
+}
+
+.btnPay:hover{
+    background-color: var(--black);
+    color: var(--white);
+}

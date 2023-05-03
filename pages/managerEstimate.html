@@ -87,7 +87,17 @@
         </tr> -->
     </table>
 
+    <button class="btnPay">Оплатить!</button>
+
     <script src="js/managerEstimate.js"></script>
     <script src="js/exit.js"></script>
 </body>
+<script type="text/javascript">
+    let element = document.querySelector('.estimate')
+    var rect = element.getBoundingClientRect();
+    let btnPay = document.querySelector('.btnPay')
+    console.log(rect.bottom, rect.top)
+    btnPay.style.top = rect.bottom + 30 + 'px'
+    console.log(btnPay.style.top)
+</script>
 </html>

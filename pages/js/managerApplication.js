@@ -177,6 +177,9 @@ async function getStuff(dataStuff){
 
         let masInfo = [nameDeceased, dateOfDeath, dataPassport, clientName, dataPassportClient, address]
         if(masInfo.every(element => element !== '')){
+            let manID = sessionStorage.getItem('managerID')
+            let masInfo = {"nameDeceased": nameDeceased, "dateOfDeath": dateOfDeath, "dataPassport": dataPassport, "clientName": clientName, "dataPassportClient": dataPassportClient, "address": address, "managerID": manID}
+            sessionStorage.setItem('info', JSON.stringify(masInfo))
             sessionStorage.setItem('product', JSON.stringify(product))
             window.location.href = '/pages/managerEstimate.html'
         } else alert('Заполните все поля!')

@@ -20,3 +20,34 @@ let text = `
 </tr>
 `
 table.innerHTML += text
+
+let btnP = document.querySelector('.btnPay')
+
+btnP.addEventListener('click', function(){
+    let info = JSON.parse(sessionStorage.getItem('info'))
+
+    async function saveOrder(){
+        let sendInfo = {
+            "info": info,
+            "products": products
+        }
+        let response = await fetch('/addEstimate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sendInfo)
+        });
+        let result = await response.json()
+
+        if (result.response == true){
+            alert ('Заказ оформлен!')
+            window.location.href = '/pages/managerStorage.html'
+        } else alert('Ошибка отправки данных, попробуйте позднее!')
+    }
+
+    // saveOrder()
+
+    console.log(info)
+    console.log(products)
+})

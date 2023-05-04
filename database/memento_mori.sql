@@ -171,7 +171,8 @@ CREATE TABLE public.products (
     amount integer,
     cost_for_one integer,
     details character varying,
-    image_link character varying
+    image_link character varying,
+    deleted boolean DEFAULT false
 );
 
 
@@ -349,17 +350,17 @@ COPY public.orders_to_products ("order_ID", "product_ID", amount) FROM stdin;
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, type, category, amount, cost_for_one, details, image_link) FROM stdin;
-6	услуга	5	1	1000	\N	\N
-7	услуга	6	1	1500	\N	\N
-8	услуга	7	1	1000	\N	\N
-9	услуга	8	1	100	\N	\N
-10	услуга	9	1	2500	\N	\N
-2	товар	1	1	20000	с бархатом	data:image/jpeg;base64
-3	товар	2	50	300	розы	data:image/jpeg;base64
-4	товар	3	10	2000	каменная	https://mygranite.ru/upload/iblock/d20/vvmyb1w8osz9y27qd0he8ofh2k2t9aq6.jpg
-5	товар	4	1	100000	золотой	https://5ritual.ru/upload/product/kresty-na-mogilu/krest-derevyannyi-na-mogilu-005.jpg
-1	товар	1	8	2000	черный	data:image/jpeg;base64
+COPY public.products (id, type, category, amount, cost_for_one, details, image_link, deleted) FROM stdin;
+6	услуга	5	1	1000	\N	\N	f
+7	услуга	6	1	1500	\N	\N	f
+8	услуга	7	1	1000	\N	\N	f
+9	услуга	8	1	100	\N	\N	f
+10	услуга	9	1	2500	\N	\N	f
+2	товар	1	1	20000	с бархатом	data:image/jpeg;base64	f
+3	товар	2	50	300	розы	data:image/jpeg;base64	f
+4	товар	3	10	2000	каменная	https://mygranite.ru/upload/iblock/d20/vvmyb1w8osz9y27qd0he8ofh2k2t9aq6.jpg	f
+5	товар	4	1	100000	золотой	https://5ritual.ru/upload/product/kresty-na-mogilu/krest-derevyannyi-na-mogilu-005.jpg	f
+1	товар	1	8	2000	черный	data:image/jpeg;base64	f
 \.
 
 

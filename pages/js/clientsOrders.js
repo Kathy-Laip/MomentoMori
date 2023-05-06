@@ -15,6 +15,9 @@ class Order {
 
 const orders = []
 
+
+// функция получения информация о всех заказах клиента
+// также размещает информацию о закаах на страницу и формирует все функции, связанные с заказами
 async function sendClinetID(){
     let clientID = {
         clientId: client

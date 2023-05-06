@@ -1,5 +1,7 @@
 const listProduct = document.getElementById('listOrderProduct')
 
+
+//добавление нового поля для заказа товара
 function addLineForProduct(){
     const innerForOneInputs = `
     <div class="containerForProductInList">
@@ -14,6 +16,8 @@ function addLineForProduct(){
 const btnOrder = document.querySelector('.btnOrder')
 
 let listProducts = []
+
+//слушатель на нажатии заказа товаров, подготовка даннхы, отправка данных на сервер
 btnOrder.addEventListener('click', function(){
     var list = listProduct.querySelectorAll('.containerForProductInList')
     for(let l of list){
@@ -25,6 +29,8 @@ btnOrder.addEventListener('click', function(){
         listProducts.push(item)
     }
 
+
+    //отправка данных о всех товара, которые будут заказывать
     async function sendProducts(){
         let sendInfo = {
             "info": listProducts,

@@ -11,12 +11,17 @@ const p = new Promise((res, rej) => {
     getProducts(dataAboutServices)
 })
 
+
+// функция получения информация о всех услугах
+// также размещает информацию об услугах на страницу и формирует все функции, связанные с услугами
 async function getProducts(dataAboutServices){
     var infoServices = JSON.parse(dataAboutServices)
     console.log(infoServices)
 
     insertINtoProducts(infoServices)
 
+
+    // вставка данных об услугах на страницу с услугами
     function insertINtoProducts(infoServices){
         var container = document.getElementById('services')
         if(infoServices[0].servicesFound){

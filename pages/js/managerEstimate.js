@@ -23,9 +23,14 @@ table.innerHTML += text
 
 let btnP = document.querySelector('.btnPay')
 
+
+// подготовка данных о всех товарах, что хотят заказать
 btnP.addEventListener('click', function(){
     let info = JSON.parse(sessionStorage.getItem('info'))
 
+
+
+    //отправка всех данных о клиенте и товарах в заказе на сервер
     async function saveOrder(){
         let sendInfo = {
             "info": info,

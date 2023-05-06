@@ -11,12 +11,16 @@ const p = new Promise((res, rej) => {
     getProducts(dataAboutProduct)
 })
 
+
+// функция получения информация о всех товарах
+// также размещает информацию о товарах на страницу и формирует все функции, связанные с товарами
 async function getProducts(dataAboutProduct){
     var infoProducts = JSON.parse(dataAboutProduct)
     console.log(infoProducts)
 
     insertINtoProducts(infoProducts)
 
+    // вставка данных о товаре на страницу
     function insertINtoProducts(infoProducts){
         var container = document.getElementById('products')
         console.log(infoProducts)
@@ -40,6 +44,7 @@ async function getProducts(dataAboutProduct){
 
     var deleteLesson = document.getElementsByClassName("deleteProduct");
     for(let i = 0; i < deleteLesson.length; i++){
+        //слушатель на событие нажатия кнопки удаления товара
         deleteLesson[i].addEventListener('click',  function(e) {
             var parent = e.target.closest(".containerProduct")
             var text = parent.querySelector('.textProduct').innerHTML.split('<br>').slice(0,2).map(el => el.trim())
@@ -65,6 +70,7 @@ async function getProducts(dataAboutProduct){
     let btnAdd = document.querySelector('.addPr')
     let formAddProduct = document.getElementById('formAdd')
 
+    // нажатие на открытие формы для заполнения данных о новом товаре и его добавление
     btnAdd.addEventListener('click', () => {
         formAddProduct.classList.add('open');
     });
@@ -74,7 +80,9 @@ async function getProducts(dataAboutProduct){
         formAddProduct.classList.remove('open');
     })
 
+
     let btnAddProduct = document.querySelector('.btnAddProductToDB') 
+    //добавление нового товара, отправка данных на сервер
     btnAddProduct.addEventListener('click', () => {
         let categorAddProduct = document.getElementById('categorAddProduct').value
         let detailsAddProduct = document.getElementById('detailsAddProduct').value

@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='../pages', static_folder='../pages')
 '''
 Функция, возвращающая параметры базы данных для подключения.
 '''
-def config(filename='database.ini', section='postgresql'):
+def config(filename='datababase.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
     db = {}
@@ -262,7 +262,7 @@ def checkAmountInStorage():
     return json.dumps(outData)
 
 
-@app.route("/addOrder", methods = ["POST"])
+#@app.route("/addOrder", methods = ["POST"])
 def addOrderToDb():
     cursor = conn.cursor()
     jsonInData = json.loads(request.get_data())
@@ -284,24 +284,37 @@ def addOrderToDb():
         inProducts[i]['productPrice'] = prod['pr']
         totalPrice += prod['pr']
         inProducts[i]['count'] = prod['count']
+    '''
+    inAddress = 'adddddresssss'
+    inClientName = 'cliiiiient name'
+    inDeadmansPassport = 'deadmansport'
+    inPhoneClient = "89462718496"
+    inDateOfDeath = 'dateeeee of death'
+    inManagerId = 3
+    inDeadmansName = 'deadnaaame'
+    '''
 
-    outData = {'addedFlag': False}
+    outData = {}
     dataToDb = {}
-    client_id = cursor.execute(f"select id from users where phone = {inPhoneClient}")
+    client_id = cursor.execute(f"select id from users where phone = '{inPhoneClient}'")
     client_id = cursor.fetchone()
-    dataToDb['client_ID'] = client_id
+    dataToDb['client_ID'] = client_id[0]
     dataToDb['manager_ID'] = inManagerId
-    dataToDb['price'] = totalPrice
+    dataToDb['price'] = 12300
     dataToDb['status'] = 'в обработке'
+    dataToDb['address'] = inAddress
     dataToDb['deadmans_name'] = inDeadmansName
     dataToDb['deadmans_passport'] = inDeadmansPassport
-    
-    '''
+
     try:
+        cursor.execute(f"insert into orders (\"client_ID\", \"manager_ID\", price, status, address, deadmans_name, deadmans_passport) values ({dataToDb['client_ID']}, {dataToDb['manager_ID']}, {dataToDb['price']}, '{dataToDb['status']}', '{dataToDb['address']}', '{dataToDb['deadmans_name']}', '{dataToDb['deadmans_passport']}')")
+        outData["addedFlag"] = True
+        print('i ran')
+    except:
+        outData["addedFlag"] = False
+        print('i didnt run')
     
     return json.dumps(outData)
-    '''
-
 
 
 '''
@@ -343,4 +356,5 @@ def insertProductsToBuy():
 #conn.close()
 if __name__ == '__main__':
     # app = Flask(__name__, template_folder='../pages', static_folder='../pages')
-    app.run(debug=True, host="127.0.0.1")
+    #app.run(debug=True, host="127.0.0.1")
+    addOrderToDb()

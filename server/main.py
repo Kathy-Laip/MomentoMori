@@ -262,7 +262,7 @@ def checkAmountInStorage():
     return json.dumps(outData)
 
 
-#@app.route("/addOrder", methods = ["POST"])
+app.route("/addOrder", methods = ["POST"])
 def addOrderToDb():
     cursor = conn.cursor()
     jsonInData = json.loads(request.get_data())
@@ -284,6 +284,7 @@ def addOrderToDb():
         inProducts[i]['productPrice'] = prod['pr']
         totalPrice += prod['pr']
         inProducts[i]['count'] = prod['count']
+    
     '''
     inAddress = 'adddddresssss'
     inClientName = 'cliiiiient name'
@@ -294,8 +295,8 @@ def addOrderToDb():
     inDeadmansName = 'deadnaaame'
     '''
 
-    outData = {}
     dataToDb = {}
+
     client_id = cursor.execute(f"select id from users where phone = '{inPhoneClient}'")
     client_id = cursor.fetchone()
     dataToDb['client_ID'] = client_id[0]
@@ -308,16 +309,44 @@ def addOrderToDb():
 
     try:
         cursor.execute(f"insert into orders (\"client_ID\", \"manager_ID\", price, status, address, deadmans_name, deadmans_passport) values ({dataToDb['client_ID']}, {dataToDb['manager_ID']}, {dataToDb['price']}, '{dataToDb['status']}', '{dataToDb['address']}', '{dataToDb['deadmans_name']}', '{dataToDb['deadmans_passport']}')")
-        outData["addedFlag"] = True
-        print('i ran')
+        orderAddedFlag = True
+        print('order added')
     except:
-        outData["addedFlag"] = False
-        print('i didnt run')
+        orderAddedFlag = False
+        print('order was not added')
     
+    orderId = cursor.execute("select max(id) from orders")
+    orderId = cursor.fetchone()
+
+    for i, prod in enumerate(jsonInData['products']):
+        inProducts.append({})
+        inProducts[i]['category'] = prod['category']
+        inProducts[i]['details'] = prod['details']
+        inProducts[i]['productId'] = prod['id']
+        inProducts[i]['productPrice'] = prod['pr']
+        totalPrice += prod['pr']
+        inProducts[i]['count'] = prod['count']
+
+    try:
+        for i in range(len(inProducts)):
+            cursor.execute("insert into orders_to_products (\"order_ID\", \"product_ID\", amount) values ({orderId}, {inProducts[i]['productId']}, {inProducts[i]['count']})")
+        productsAddedFlag = True
+        print('products added')
+    except:
+        productsAddedFlag = False
+        print('products were not added')
+
+    outData = {}
+
+    if productsAddedFlag == True and orderAddedFlag == True:
+        outData['addedFlag'] = True
+    else:
+        outData['addedFlag'] = False
+
     return json.dumps(outData)
 
 
-'''
+
 @app.route("/productsToOrder", methods=["POST"])
 def insertProductsToBuy():
     cursor = conn.cursor()
@@ -341,20 +370,28 @@ def insertProductsToBuy():
     dataToDb["productId"] = productId
     dataToDb["amount"] = inDataAmount
     
+    outData = {}
+
     isOrderInDbFromDb = cursor.execute('select * from products_to_buy where "product_ID" = {0}'.format(productId))
     isOrderInDbFromDb = cursor.fetchall()
-    if isOrderInDbFromDb is None:
-        ids = cursor.execute('select max(id) from products_to_buy')
-        ids = cursor.fetchone()
-        cursor.execute("insert into products_to_buy values ({0}, {1}, {2})".format(productId, inDataAmount))
-    else:
-        cursor.execute("update products_to_buy set amount = {0} where id = {1}".format(
-            isOrderInDbFromDb[2] + inDataAmount, id = isOrderInDbFromDb[0]
-        ))
-'''
+    try:
+        if isOrderInDbFromDb is None:
+            cursor.execute("insert into products_to_buy (\"product_ID\", amount) values ({0}, {1})".format(productId, inDataAmount))
+        else:
+            cursor.execute("update products_to_buy set amount = {0} where id = {1}".format(
+                isOrderInDbFromDb[2] + inDataAmount, id = isOrderInDbFromDb[0]
+            ))
+        outData['addedFlag'] = True
+        print('i ran')
+    except:
+        outData['addedFlag'] = False
+        print('i didnt run')
+
+    return json.dumps(outData)
+
 
 #conn.close()
 if __name__ == '__main__':
-    # app = Flask(__name__, template_folder='../pages', static_folder='../pages')
-    #app.run(debug=True, host="127.0.0.1")
+    #app = Flask(__name__, template_folder='../pages', static_folder='../pages')
+    app.run(debug=True, host="127.0.0.1")
     addOrderToDb()

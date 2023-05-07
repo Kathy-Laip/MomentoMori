@@ -11,6 +11,8 @@ const p = new Promise((res, rej) => {
     getStuff(dataAboutProduct)
 })
 
+
+// получение данных о товарах и услугах с сервера, манипулирование с данными, оформление заказа
 async function getStuff(dataStuff){
     var infoStuff = JSON.parse(dataStuff)
     console.log(infoStuff)
@@ -19,6 +21,8 @@ async function getStuff(dataStuff){
 
     // console.log(sessionStorage.getItem('managerID'))
 
+
+    // добавление информации о товарах и услугах в поле с категроями
     insertIntoStuffInCategory(infoStuff)
 
     function insertIntoStuffInCategory(infoStuff){
@@ -31,6 +35,8 @@ async function getStuff(dataStuff){
         }
     }
 
+
+    // выбор категории, на основе категории выбирается конкретный товар, исходя из его описания
     document.getElementById('category').addEventListener('change', function(){
         let productChange = document.getElementById('product')
         productChange.innerHTML = '<option value=""></option>'
@@ -46,6 +52,8 @@ async function getStuff(dataStuff){
         }
     })
 
+
+    // добавление товара в список товаров/услуг, отображение выбранного товара/услуги
     document.querySelector('.addProduct').addEventListener('click', function(){
         var nameProduct = document.getElementById('product').value
         var categoryProduct = document.getElementById('category').value
@@ -56,6 +64,8 @@ async function getStuff(dataStuff){
 
         console.log(categoryProduct, nameProduct)
 
+
+        //выбор данных, исходя из вида: товар или услуга
         for (let i=2; i < infoStuff.length; i++){
             if(infoStuff[i].category === categoryProduct && infoStuff[i].details === nameProduct){
                 idProduct = infoStuff[i].id
@@ -104,6 +114,8 @@ async function getStuff(dataStuff){
                 productAmount: countProduct
             }
 
+
+            //отправка данных, можно ли выбрать заказать такое количество?
             async function checkProduct(info){
                 let response = await fetch("/checkAmount", {
                     method: 'POST',
@@ -135,6 +147,7 @@ async function getStuff(dataStuff){
         }
 
 
+        // удаление товара из списка, выбраных товаров
         var deleteLesson = document.getElementsByClassName("deleteLesson");
         for(let i = 0; i < deleteLesson.length; i++){
             deleteLesson[i].addEventListener('click',  function(e) {
@@ -169,6 +182,8 @@ async function getStuff(dataStuff){
     })
 
     
+
+    // событие на нажатие кнопки оформления сметы
     document.querySelector('.arrange').addEventListener('click', () => {
         let nameDeceased = document.getElementById('nameDeceased').value
         let dateOfDeath = document.getElementById('dateOfDeath').value

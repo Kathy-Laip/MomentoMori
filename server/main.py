@@ -74,8 +74,6 @@ def getProducts():
         outData.append({})
         outData[0]["productsFound"] = False
     else:
-        print(dataFromDb)
-        print(len(dataFromDb))
         outData.append({})
         outData[0]["productsFound"] = True
         for i in range(1, len(dataFromDb) + 1):
@@ -133,6 +131,8 @@ def getOrdersForManager():
     outData = []
     dataFromDb = cursor.execute("select * from orders")
     dataFromDb = cursor.fetchall()
+    print(dataFromDb)
+    print(len(dataFromDb))
 
     clientsFromDb = cursor.execute("select * from users where status = 'клиент'")
     clientsFromDb = cursor.fetchall()
@@ -140,6 +140,7 @@ def getOrdersForManager():
     for i in range(len(clientsFromDb)):
         clientsFio[clientsFromDb[i][0]] = clientsFromDb[i][4]
 
+    print(clientsFio)
     if dataFromDb is None:
         outData.append()
         outData[0]["ordersFound"] = False
@@ -249,16 +250,27 @@ def checkAmountInStorage():
     jsonInData = json.loads(request.get_data())
     productId = jsonInData["productId"]
     desiredAmount = jsonInData["productAmount"]
+    # print(type(desiredAmount))
     outData = {}
     
     dataFromDb = cursor.execute("select amount from products where id = {0}".format(productId))
     dataFromDb = cursor.fetchone()
+    dataFromDb = dataFromDb[0]
 
-    if dataFromDb[0] >= int(desiredAmount):
+    dataType = cursor.execute('select type from products where id = {}'.format(productId))
+    dataType = cursor.fetchone()
+    dataType = dataType[0]
+
+    # print(dataType)
+    # print(dataFromDb)
+
+    if dataType == 'товар' and dataFromDb >= desiredAmount:
         outData["enoughAmount"] = True
-    else:
+    elif dataType == 'товар' and dataFromDb < desiredAmount:
         outData["enoughAmount"] = False
-        outData["amountInStorage"] = dataFromDb[0]
+        outData["amountInStorage"] = dataFromDb
+    elif dataType == 'услуга':
+        outData["enoughAmount"] = True
     # print(outData)
 
     return json.dumps(outData)
@@ -335,7 +347,7 @@ def addOrderToDb():
 def addNewProducts():
     cursor = conn.cursor()
     products = json.loads(request.get_data())["info"]
-    print(products)
+    # print(products)
 
     for product in products:
         if not product["count"].isdigit():
@@ -361,7 +373,7 @@ def addNewProducts():
         order_id = order_id[0] + 1
         # print(order_id)
         add_new = f'''insert into "products_to_buy"("product_ID", "amount") values ({prod_id}, {product["count"]});'''
-        print(add_new)
+        # print(add_new)
         # cursor.execute(add_new)
         try:
             cursor.execute(add_new)
@@ -419,7 +431,7 @@ def addProductStorage():
 def deleteProduct():
     cursor = conn.cursor()
     product = json.loads(request.get_data())
-    print(product)
+    # print(product)
     if len(product) != 2:
         return json.dumps({"deletedFlag": False})
     
@@ -445,51 +457,79 @@ def deleteProduct():
 
     return json.dumps({"deletedFlag": True})
 
-@app.route("/productsToOrder", methods=["POST"])
-def insertProductsToBuy():
+
+@app.route("/addServices", methods=["POST"])
+def addServicesStorage():
     cursor = conn.cursor()
-    jsonInData = json.loads(request.get_data())
-    inDataCategory = jsonInData["productName"]
-    inDataDetails = jsonInData["productDetails"]
-    inDataAmount = jsonInData["productAmount"]
-
-    categoriesFromDb = cursor.execute("select * from products_categories")
-    categoriesFromDb = cursor.fetchall()
-    categories = {}
-    for i in range(len(categoriesFromDb)):
-        categories[categoriesFromDb[i][1]] = categoriesFromDb[i][0]
-
-    productId = cursor.execute("select id from products where category = '{0}' and details = '{1}'".format(
-            categories[inDataCategory], inDataDetails
-        ))
-    productId = cursor.fetchall()
+    product = json.loads(request.get_data())
+    if len(product) != 2:
+        return json.dumps({"addedFlag": False})
     
-    dataToDb = {}
-    dataToDb["productId"] = productId
-    dataToDb["amount"] = inDataAmount
-    
-    outData = {}
+    service = product[0]
+    cost = product[1]
+    var = 'NULL'
 
-    isOrderInDbFromDb = cursor.execute('select * from products_to_buy where "product_ID" = {0}'.format(productId))
-    isOrderInDbFromDb = cursor.fetchall()
+    # try:
+    select_cat_id_query = f'''select id from products_categories where name='{service}';'''
+    cat_id_result = cursor.execute(select_cat_id_query)
+    cat_id_result = cursor.fetchone()
+    if(cat_id_result != None):
+        return json.dumps({"addedFlag": False})
+    # print(cat_id_result)
+    cat_id = None
+    if cat_id_result == None:
+        add_category_query = f'''insert into products_categories(name) values('{service}');'''
+        cursor.execute(add_category_query)
+        conn.commit()
+        cat_id = cursor.execute(select_cat_id_query)
+        cat_id = cursor.fetchone()
+        cat_id = cat_id[0]
+    
+    add_services_query =\
+    f'''
+        insert into products(type, category, amount, cost_for_one, details, image_link, is_selling)
+        values('{"услуга"}', {cat_id}, 1, {cost}, {var}, {var}, 1);
+    '''
+
+    cursor.execute(add_services_query)
+    conn.commit()
+    # except:
+    #     return json.dumps({"res": False})
+    return json.dumps({"addedFlag": True})
+
+
+@app.route("/deleteServices", methods=["POST"])
+def deleteServices():
+    cursor = conn.cursor()
+    product = json.loads(request.get_data())
+    # print(product)
+    if len(product) != 2:
+        return json.dumps({"deletedFlag": False})
+    
+    category = product[0]
+    cost = product[1]
+    
+    product_id_request =\
+        f'''
+            select prod.id from "products" as prod
+            join products_categories as category on prod.category=category.id
+            where category.name='{category}' and prod.cost_for_one='{cost}';
+        '''
+
+    prod_id = cursor.execute(product_id_request)
+    prod_id = cursor.fetchone()
+    prod_id = prod_id[0]
+    product_remove_from_sell_query = 'update products set is_selling=0 where id={};'.format(prod_id)
     try:
-        if isOrderInDbFromDb is None:
-            cursor.execute("insert into products_to_buy (\"product_ID\", amount) values ({0}, {1})".format(productId, inDataAmount))
-        else:
-            cursor.execute("update products_to_buy set amount = {0} where id = {1}".format(
-                isOrderInDbFromDb[2] + inDataAmount, id = isOrderInDbFromDb[0]
-            ))
-        outData['addedFlag'] = True
-        print('i ran')
+        cursor.execute(product_remove_from_sell_query)
+        conn.commit()
     except:
-        outData['addedFlag'] = False
-        print('i didnt run')
+        return json.dumps({"deletedFlag": False})
 
-    return json.dumps(outData)
-
+    return json.dumps({"deletedFlag": True})
 
 # conn.close()
 if __name__ == '__main__':
     # app = Flask(__name__, template_folder='../pages', static_folder='../pages')
-    app.run(debug=True, host="127.0.0.1")
+    app.run(debug=True, host="127.0.0.1", port=5555)
     # addOrderToDb()

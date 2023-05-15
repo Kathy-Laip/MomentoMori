@@ -73,7 +73,7 @@ async function getStuff(dataStuff){
                     console.log(infoStuff[i].costForOne)
                     price = infoStuff[i].costForOne * Number(countProduct)
                 } 
-            } else if(infoStuff[i].category === categoryProduct && infoStuff[i].details === null){
+            } else if(infoStuff[i].category === categoryProduct && (infoStuff[i].details === null || infoStuff[i].details == "")){
                 idProduct = infoStuff[i].id
                 if(infoStuff[i].type == 'услуга'){
                     console.log(infoStuff[i].costForOne)
@@ -111,7 +111,7 @@ async function getStuff(dataStuff){
 
             let info = {
                 productId: idProduct,
-                productAmount: countProduct
+                productAmount: Number(countProduct)
             }
 
 

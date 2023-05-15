@@ -31,3 +31,96 @@
     color: var(--black);
     word-wrap: break-word;
 }
+
+
+#formServices {
+    display: none;
+    animation-duration: 1.5s;
+    animation-fill-mode: both;
+    animation-name: fadeIn;
+
+    position:absolute;
+    width: 40%;
+    height: 40%;
+    top: 30%;
+    left: 30%;
+
+    background-color: black;
+    color: white;
+
+    border: none;
+    font-size: 32px;
+  }
+  
+#formServices.open {
+    display: block;
+    z-index: 1;
+}
+
+.addServices{
+    position: absolute;
+    top: 34%;
+    left: 23%;
+
+    border: none;
+    background-color: var(--brown);
+    color: var(--black);
+
+    width: 5%;
+    height: 5%;
+    font-size: 32px;
+}
+
+.addServices:hover{
+    color: white;
+    background-color: black;
+}
+
+.closeAddServices{
+    position: absolute;
+    top: 5%;
+    right: 5%;
+
+    border: none;
+    font-size: 32px;
+    width: 10%;
+    height: 10%;
+    background-color: black;
+    color: white;
+}
+
+.closeAddServices:hover{
+    color: gray;
+}
+
+.btnAddServicesToDB{
+    position: absolute;
+    bottom: 5%;
+    right: 8%;
+
+    border: none;
+    font-size: 20px;
+    width: 20%;
+    height: 10%;
+}
+
+.deleteServices{
+    position: absolute !important;
+    font-size: 40px !important;
+    text-align: center !important;
+    /* content: "\00d7"; */
+    top: 0% !important;
+    right: 0% !important;
+    width: 5% !important;
+    height: 5% !important;
+    background-color: transparent !important;
+    opacity: 80% !important;
+    border: none !important;
+    color: black !important;
+    z-index: 5;
+    /* margin: auto !important; */
+}
+
+.deleteServices:hover{
+    color: white !important;
+}

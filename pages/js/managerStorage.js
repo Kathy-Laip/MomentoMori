@@ -63,7 +63,7 @@ async function getProducts(dataAboutProduct){
                     parent.closest('.containerProduct').remove();
                 } else alert('Что-то пошло нет так...')
             }
-            // deleteProduct()
+            deleteProduct()
         }, false)
     }
 
@@ -87,8 +87,12 @@ async function getProducts(dataAboutProduct){
         let categorAddProduct = document.getElementById('categorAddProduct').value
         let detailsAddProduct = document.getElementById('detailsAddProduct').value
         let costAddProduct = document.getElementById('costAddProduct').value
-        let info = [categorAddProduct, detailsAddProduct, costAddProduct]
+        let countAddProduct = document.getElementById('countAddProduct').value
+        let info = [categorAddProduct, detailsAddProduct, costAddProduct, countAddProduct]
         async function addProduct(){
+            if(info === []){
+                alert('Пустые поля, введите данные!')
+            }
             let response = await fetch('/addProduct', {
                 method: 'POST',
                 body: JSON.stringify(info),
@@ -102,15 +106,17 @@ async function getProducts(dataAboutProduct){
             if(result.addedFlag == true){
                 formAddProduct.style.display = 'none'
                 alert('Товар успешно добавлен!')
+                info = []
                 setTimeout(() => {
                     window.location.href = '/pages/managerStorage.html'
                 }, 1000)
             } else{
                 formAddProduct.style.display = 'none'
                 alert('Что-то пошло нет так...')
+                info = []
             } 
         }
-        // addProduct()
+        addProduct()
     })
 
 

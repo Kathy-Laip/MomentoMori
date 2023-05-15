@@ -34,24 +34,25 @@ btnOrder.addEventListener('click', function(){
     async function sendProducts(){
         if(listProduct === []){
             alert("Пустые поля, введите данные!")
+        } else{
+            let sendInfo = {
+                "info": listProducts,
+            }
+            let response = await fetch('/addNewProducts', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(sendInfo)
+            });
+            let result = await response.json()
+    
+            if (result.addedFlag == true){
+                alert ('Заказ оформлен!')
+                window.location.href = '/pages/managerStorage.html'
+                listProduct = []
+            } else alert('Ошибка отправки данных!')
         }
-        let sendInfo = {
-            "info": listProducts,
-        }
-        let response = await fetch('/addNewProducts', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(sendInfo)
-        });
-        let result = await response.json()
-
-        if (result.addedFlag == true){
-            alert ('Заказ оформлен!')
-            window.location.href = '/pages/managerStorage.html'
-            listProduct = []
-        } else alert('Ошибка отправки данных!')
     }
 
     sendProducts()

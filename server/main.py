@@ -74,6 +74,8 @@ def getProducts():
         outData.append({})
         outData[0]["productsFound"] = False
     else:
+        print(dataFromDb)
+        print(len(dataFromDb))
         outData.append({})
         outData[0]["productsFound"] = True
         for i in range(1, len(dataFromDb) + 1):
@@ -326,7 +328,9 @@ def addOrderToDb():
     return json.dumps({"addedFlag": True})
 
 
-
+'''
+Функция добавления товаров, которые нужны для заказа из-за нехватки на складе.
+'''
 @app.route("/addNewProducts", methods=["POST"])
 def addNewProducts():
     cursor = conn.cursor()
@@ -366,6 +370,80 @@ def addNewProducts():
             return json.dumps({"addedFlag": False})
     
     return json.dumps({"addedFlag": True})
+
+
+@app.route("/addProduct", methods=["POST"])
+def addProductStorage():
+    cursor = conn.cursor()
+    product = json.loads(request.get_data())
+    if len(product) != 4:
+        return json.dumps({"addedFlag": False})
+    
+    category = product[0]
+    details = product[1]
+    price = product[2]
+    count = product[3]
+
+    # try:
+    select_cat_id_query = f'''select id from products_categories where name='{category}';'''
+    cat_id_result = cursor.execute(select_cat_id_query)
+    cat_id_result = cursor.fetchone()
+    if(cat_id_result != None):
+        cat_id_result = cat_id_result[0]
+    # print(cat_id_result)
+    cat_id = None
+    if cat_id_result == None:
+        add_category_query = f'''insert into products_categories(name) values('{category}');'''
+        cursor.execute(add_category_query)
+        conn.commit()
+        cat_id = cursor.execute(select_cat_id_query)
+        cat_id = cursor.fetchone()
+        cat_id = cat_id[0]
+    else:
+        cat_id = cat_id_result
+    
+    add_product_query =\
+    f'''
+        insert into products(type, category, amount, cost_for_one, details, image_link, is_selling)
+        values('{"товар"}', {cat_id}, {count}, {price}, '{details}', '', 1);
+    '''
+
+    cursor.execute(add_product_query)
+    conn.commit()
+    # except:
+    #     return json.dumps({"res": False})
+    return json.dumps({"addedFlag": True})
+
+
+@app.route("/deleteProduct", methods=["POST"])
+def deleteProduct():
+    cursor = conn.cursor()
+    product = json.loads(request.get_data())
+    print(product)
+    if len(product) != 2:
+        return json.dumps({"deletedFlag": False})
+    
+    category = product[0]
+    details = product[1]
+    
+    product_id_request =\
+        f'''
+            select prod.id from "products" as prod
+            join products_categories as category on prod.category=category.id
+            where category.name='{category}' and prod.details='{details}';
+        '''
+
+    prod_id = cursor.execute(product_id_request)
+    prod_id = cursor.fetchone()
+    prod_id = prod_id[0]
+    product_remove_from_sell_query = 'update products set is_selling=0 where id={};'.format(prod_id)
+    try:
+        cursor.execute(product_remove_from_sell_query)
+        conn.commit()
+    except:
+        return json.dumps({"deletedFlag": False})
+
+    return json.dumps({"deletedFlag": True})
 
 @app.route("/productsToOrder", methods=["POST"])
 def insertProductsToBuy():

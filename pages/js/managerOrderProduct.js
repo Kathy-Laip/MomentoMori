@@ -32,6 +32,9 @@ btnOrder.addEventListener('click', function(){
 
     //отправка данных о всех товара, которые будут заказывать
     async function sendProducts(){
+        if(listProduct === []){
+            alert("Пустые поля, введите данные!")
+        }
         let sendInfo = {
             "info": listProducts,
         }
@@ -47,8 +50,9 @@ btnOrder.addEventListener('click', function(){
         if (result.addedFlag == true){
             alert ('Заказ оформлен!')
             window.location.href = '/pages/managerStorage.html'
+            listProduct = []
         } else alert('Ошибка отправки данных!')
     }
 
-    // sendProducts()
+    sendProducts()
 })

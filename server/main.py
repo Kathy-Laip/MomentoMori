@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='../pages', static_folder='../pages')
 '''
 Функция, возвращающая параметры базы данных для подключения.
 '''
-def config(filename='datababase.ini', section='postgresql'):
+def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
     db = {}
@@ -61,7 +61,7 @@ def signIn():
 def getProducts():
     cursor = conn.cursor()
     outData = []
-    dataFromDb = cursor.execute("select * from products where type = 'товар'")
+    dataFromDb = cursor.execute("select * from products where type = 'товар' and is_selling = 1;")
     dataFromDb = cursor.fetchall()
 
     categoriesFromDb = cursor.execute("select * from products_categories")
@@ -262,90 +262,110 @@ def checkAmountInStorage():
     return json.dumps(outData)
 
 
-app.route("/addOrder", methods = ["POST"])
+'''
+Функция добавления заказа и тоаров в заказ, сначала добавляется информация о заказе, далее добавляется информация о каждом товаре в 
+заказ. Если какой-либо запрос не выполняется, отправляется ответ об ошибке.
+'''
+@app.route("/addOrder", methods = ["POST"])
 def addOrderToDb():
     cursor = conn.cursor()
-    jsonInData = json.loads(request.get_data())
-    inAddress = jsonInData['info']['address']
-    inClientName = jsonInData['info']['clientName']
-    inDeadmansPassport = jsonInData['info']['dataPassport']
-    inPhoneClient = jsonInData['info']['phoneClient']
-    inDateOfDeath = jsonInData['info']['dateOfDeath']
-    inManagerId = jsonInData['info']['managerID']
-    inDeadmansName = jsonInData['info']['nameDeceased']
+    estimate = json.loads(request.get_data())
+    info = estimate['info']
+    products = estimate['products']
+    # print(info, products)
 
-    inProducts = []
-    totalPrice = 0
-    for i, prod in enumerate(jsonInData['products']):
-        inProducts.append({})
-        inProducts[i]['category'] = prod['category']
-        inProducts[i]['details'] = prod['details']
-        inProducts[i]['productId'] = prod['id']
-        inProducts[i]['productPrice'] = prod['pr']
-        totalPrice += prod['pr']
-        inProducts[i]['count'] = prod['count']
-    
-    '''
-    inAddress = 'adddddresssss'
-    inClientName = 'cliiiiient name'
-    inDeadmansPassport = 'deadmansport'
-    inPhoneClient = "89462718496"
-    inDateOfDeath = 'dateeeee of death'
-    inManagerId = 3
-    inDeadmansName = 'deadnaaame'
-    '''
+    price = 0
+    for product in products:
+        price += product['pr']
 
-    dataToDb = {}
-
-    client_id = cursor.execute(f"select id from users where phone = '{inPhoneClient}'")
+    select_client_ID_by_phone_request = f'''select id from "users" where "phone"='{info["phoneClient"]}';'''
+    client_id = cursor.execute(select_client_ID_by_phone_request)
     client_id = cursor.fetchone()
-    dataToDb['client_ID'] = client_id[0]
-    dataToDb['manager_ID'] = inManagerId
-    dataToDb['price'] = 12300
-    dataToDb['status'] = 'в обработке'
-    dataToDb['address'] = inAddress
-    dataToDb['deadmans_name'] = inDeadmansName
-    dataToDb['deadmans_passport'] = inDeadmansPassport
+    client_id = client_id[0]
+    # print(client_id)
 
-    try:
-        cursor.execute(f"insert into orders (\"client_ID\", \"manager_ID\", price, status, address, deadmans_name, deadmans_passport) values ({dataToDb['client_ID']}, {dataToDb['manager_ID']}, {dataToDb['price']}, '{dataToDb['status']}', '{dataToDb['address']}', '{dataToDb['deadmans_name']}', '{dataToDb['deadmans_passport']}')")
-        orderAddedFlag = True
-        print('order added')
-    except:
-        orderAddedFlag = False
-        print('order was not added')
+    add_order_query = f'''insert into "orders"("client_ID", "manager_ID", "price", "status", "address", "deadmans_name", "deadmans_passport")
+        values ({client_id}, {info["managerID"]}, {price}, '{"Оформлено"}', '{info["address"]}', '{info["nameDeceased"]}', '{info["dataPassport"]}');'''
     
-    orderId = cursor.execute("select max(id) from orders")
-    orderId = cursor.fetchone()
-
-    for i, prod in enumerate(jsonInData['products']):
-        inProducts.append({})
-        inProducts[i]['category'] = prod['category']
-        inProducts[i]['details'] = prod['details']
-        inProducts[i]['productId'] = prod['id']
-        inProducts[i]['productPrice'] = prod['pr']
-        totalPrice += prod['pr']
-        inProducts[i]['count'] = prod['count']
-
+    # print(add_order_query)
     try:
-        for i in range(len(inProducts)):
-            cursor.execute("insert into orders_to_products (\"order_ID\", \"product_ID\", amount) values ({orderId}, {inProducts[i]['productId']}, {inProducts[i]['count']})")
-        productsAddedFlag = True
-        print('products added')
+        cursor.execute(add_order_query)
+        conn.commit()
     except:
-        productsAddedFlag = False
-        print('products were not added')
+        return json.dumps({"addedFlag": False})
+    # cursor.execute(add_order_query)
 
-    outData = {}
+    all_order_id_request = '''select max("id") from orders;'''
+    order_id = cursor.execute(all_order_id_request)
+    order_id = cursor.fetchone()
+    order_id = order_id[0]
+    # print(order_id)
 
-    if productsAddedFlag == True and orderAddedFlag == True:
-        outData['addedFlag'] = True
-    else:
-        outData['addedFlag'] = False
+    for product in products:
+        product_id_request =\
+        f'''
+            select prod.id from "products" as prod
+            join products_categories as category on prod.category=category.id
+            where category.name='{product["category"]}' and prod.details='{product["details"]}';
+        '''
+        prod_id = cursor.execute(product_id_request)
+        prod_id = cursor.fetchone()
+        prod_id = prod_id[0]
+        # print(prod_id)
 
-    return json.dumps(outData)
+        add_new_product_query = f'''insert into "orders_to_products"("order_ID", "product_ID", "amount")
+            values ({order_id}, {prod_id}, {product["count"]});'''
+        
+        try:
+            cursor.execute(add_new_product_query)
+            conn.commit()
+        except:
+            return json.dumps({"addedFlag": False})
+        # cursor.execute(add_new_product_query)
+    
+    return json.dumps({"addedFlag": True})
 
 
+
+@app.route("/addNewProducts", methods=["POST"])
+def addNewProducts():
+    cursor = conn.cursor()
+    products = json.loads(request.get_data())["info"]
+    print(products)
+
+    for product in products:
+        if not product["count"].isdigit():
+            return json.dumps({"response": False})
+
+        product_id_request =\
+        f'''
+            select prod.id from "products" as prod
+            join products_categories as category on prod.category=category.id
+            where category.name='{product["category"]}' and prod.details='{product["details"]}';
+        '''
+
+        prod_id = cursor.execute(product_id_request)
+        prod_id = cursor.fetchone()
+        if(prod_id == None):
+            prod_id = None
+        else: prod_id = prod_id[0]
+        # print(prod_id)
+
+        all_order_id_request = '''select max("id") from products_to_buy;'''
+        order_id = cursor.execute(all_order_id_request)
+        order_id = cursor.fetchone()
+        order_id = order_id[0] + 1
+        # print(order_id)
+        add_new = f'''insert into "products_to_buy"("product_ID", "amount") values ({prod_id}, {product["count"]});'''
+        print(add_new)
+        # cursor.execute(add_new)
+        try:
+            cursor.execute(add_new)
+            conn.commit()
+        except:
+            return json.dumps({"addedFlag": False})
+    
+    return json.dumps({"addedFlag": True})
 
 @app.route("/productsToOrder", methods=["POST"])
 def insertProductsToBuy():
@@ -390,8 +410,8 @@ def insertProductsToBuy():
     return json.dumps(outData)
 
 
-#conn.close()
+# conn.close()
 if __name__ == '__main__':
-    #app = Flask(__name__, template_folder='../pages', static_folder='../pages')
+    # app = Flask(__name__, template_folder='../pages', static_folder='../pages')
     app.run(debug=True, host="127.0.0.1")
-    addOrderToDb()
+    # addOrderToDb()

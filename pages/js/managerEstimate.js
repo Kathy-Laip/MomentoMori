@@ -28,15 +28,13 @@ let btnP = document.querySelector('.btnPay')
 btnP.addEventListener('click', function(){
     let info = JSON.parse(sessionStorage.getItem('info'))
 
-
-
     //отправка всех данных о клиенте и товарах в заказе на сервер
     async function saveOrder(){
         let sendInfo = {
             "info": info,
             "products": products
         }
-        let response = await fetch('/addOrder', {
+        let response = await fetch("/addOrder", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -51,7 +49,7 @@ btnP.addEventListener('click', function(){
         } else alert('Ошибка отправки данных, попробуйте позднее!')
     }
 
-    // saveOrder()
+    saveOrder()
 
     console.log(info)
     console.log(products)

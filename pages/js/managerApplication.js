@@ -89,7 +89,7 @@ async function getStuff(dataStuff){
                 id: idProduct,
                 category: categoryProduct,
                 pr: price,
-                details: '',
+                details: 'NULL',
                 count: 1
             }
             listProduct.innerHTML += `<div class="containerForProduct">

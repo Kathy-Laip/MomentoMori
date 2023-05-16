@@ -304,7 +304,6 @@ def addOrderToDb():
     # print(add_order_query)
     try:
         cursor.execute(add_order_query)
-        conn.commit()
     except:
         return json.dumps({"addedFlag": False})
     # cursor.execute(add_order_query)
@@ -316,12 +315,18 @@ def addOrderToDb():
     # print(order_id)
 
     for product in products:
+        # print(product)
+        if(product["details"] == ''):
+            product["details"] = ' is NULL'
+        else:
+            product['details'] = " = '" + product['details'] + "'"
         product_id_request =\
         f'''
             select prod.id from "products" as prod
             join products_categories as category on prod.category=category.id
-            where category.name='{product["category"]}' and prod.details='{product["details"]}';
+            where category.name='{product["category"]}' and prod.details{product["details"]};
         '''
+        # print(product_id_request)
         prod_id = cursor.execute(product_id_request)
         prod_id = cursor.fetchone()
         prod_id = prod_id[0]
@@ -332,10 +337,10 @@ def addOrderToDb():
         
         try:
             cursor.execute(add_new_product_query)
-            conn.commit()
         except:
             return json.dumps({"addedFlag": False})
         # cursor.execute(add_new_product_query)
+    conn.commit()
     
     return json.dumps({"addedFlag": True})
 

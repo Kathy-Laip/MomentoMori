@@ -389,6 +389,9 @@ def addNewProducts():
     return json.dumps({"addedFlag": True})
 
 
+'''
+Функция добавления товара на склад.
+'''
 @app.route("/addProduct", methods=["POST"])
 def addProductStorage():
     cursor = conn.cursor()
@@ -432,6 +435,9 @@ def addProductStorage():
     return json.dumps({"addedFlag": True})
 
 
+'''
+Функция удаления товара со склада.
+'''
 @app.route("/deleteProduct", methods=["POST"])
 def deleteProduct():
     cursor = conn.cursor()
@@ -463,6 +469,9 @@ def deleteProduct():
     return json.dumps({"deletedFlag": True})
 
 
+'''
+Функция добавления услуги в каталог.
+'''
 @app.route("/addServices", methods=["POST"])
 def addServicesStorage():
     cursor = conn.cursor()
@@ -503,6 +512,9 @@ def addServicesStorage():
     return json.dumps({"addedFlag": True})
 
 
+'''
+Функция удаления услуги со склада.
+'''
 @app.route("/deleteServices", methods=["POST"])
 def deleteServices():
     cursor = conn.cursor()
